@@ -127,11 +127,15 @@ skills/scope/
 │   └── AGENTS.template.md            # The always-on project constitution (AGENTS.md)
 └── references/
     ├── stack-matrix.md               # The 12 infrastructure layers & tier standards
-    ├── skills-and-safety.md          # Built-ins, skill & MCP inventory, packs, vetting
+    ├── skills-and-safety.md          # Built-ins, skill & MCP inventory, packs & vetting
     ├── config-templates.md           # Permissions, hooks, MCP configs & UI rules
     ├── caching-and-scaling.md        # Cache headers, Redis, probes & scaling limits
     └── recon.md                      # Safe inspection of reference websites
 ```
+
+Run `node scripts/skill-tools.mjs sync` to sync the three skill copies and `node scripts/skill-tools.mjs check` to validate them.
+
+> **Note:** Vendor names, versions, advisories and benchmark claims in this skill come from third-party research notes and were not independently verified. Check each repository and advisory before installing.
 
 ---
 

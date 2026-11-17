@@ -40,7 +40,7 @@ Before conducting reconnaissance, classify the target into one of three authoriz
 
 ## 4. Inspection Tools
 - **Core (Built-in):** Built-in `/browser`. Captures rendered layouts across responsive breakpoints (390px, 768px, 1280px), evaluates console errors, and tracks network calls.
-- **Optional (Vetted Local Tools):** Local token extractors (e.g. `designlang`) outputting directly to `.tmp/recon/`. A tool is "vetted" only after it passes the checklist in `skills-and-safety.md` (Section 8) and is recorded in `architecture/decisions.md`. Never use login or stealth modes.
+- **Optional (Vetted Local Tools):** Local token extractors (e.g. `designlang`) outputting directly to `.tmp/recon/`. A tool is "vetted" only after it passes the checklist in `references/skills-and-safety.md` (Section 6) and is recorded in `architecture/decisions.md`. Never use login or stealth modes.
 - **Prohibited:** Hosted scraping proxies, bot stealth scripts, and unvetted browser automation extensions.
 
 ---

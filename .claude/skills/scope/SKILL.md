@@ -9,7 +9,7 @@ This skill provides the end-to-end engineering protocol. Short, always-on rules 
 
 Read supporting references only when prompted by a specific phase:
 - `references/stack-matrix.md`: The 12-layer stack, tier definitions (T0/T1/T2), and layer build standards.
-- `references/skills-and-safety.md`: Built-in commands, skill & MCP inventory, platform packs, skill budget, strict vetting checklist, and permission posture.
+- `references/skills-and-safety.md`: Built-in commands, skill & MCP inventory, platform packs, skill count rule, strict vetting checklist, and permission posture.
 - `references/config-templates.md`: Settings, hooks, MCP configs, git secret scanning, and UI rule templates.
 - `references/caching-and-scaling.md`: Cache-control headers, Redis patterns, rate-limit rollouts, probes, and autoscaling.
 - `references/recon.md`: Safe inspection of existing sites (authorization tiers, safety rules, cleanroom recreation).
@@ -25,7 +25,7 @@ Read supporting references only when prompted by a specific phase:
 ---
 
 ## Phase → Skill & Tool Map
-Invoke specialized skills by name when needed; autonomous discovery can be unreliable. Every item below is inventoried, with its install guardrails, in `references/skills-and-safety.md`.
+Invoke specialized skills by name when needed; autonomous discovery can be unreliable. Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count). Every item below is inventoried, with its install guardrails, in `references/skills-and-safety.md`.
 
 | Phase | Skills & Tools |
 |---|---|
@@ -57,7 +57,7 @@ Invoke specialized skills by name when needed; autonomous discovery can be unrel
    - *Design (UI)*: Target audience, aesthetic tone, reference products, anti-patterns.
 2. **Tier & Layer Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale). Complete the Layer Decision Table in `findings.md` using the template from `references/stack-matrix.md`.
 3. **Data-First Modeling**: In `architecture/schemas.md`, define input/output payload shapes, database entities/relations, roles/permissions matrix (for RLS), and API response/error contracts.
-4. **Visual Direction (UI)**: Initialize `PRODUCT.md` and define token palettes, type scale, and layouts in `DESIGN.md`. `DESIGN.md` is the single source of truth for visual tokens.
+4. **Visual Direction (UI)**: Initialize `PRODUCT.md` and define token palettes, type scale, and layouts in `DESIGN.md`. Run `/frontend-design` once in Phase 1; merge its output (and any recon token extraction) into `DESIGN.md`, never keeping a second design file. `DESIGN.md` is the single source of truth for visual tokens.
 5. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` covering critical assets, threat vectors, and mitigations.
 6. **Reconnaissance (Optional)**: If analyzing an existing reference site, consult `references/recon.md` and confirm the authorization class. Inspect layout and public, unauthenticated network flows using `/browser`. Never copy code, text, or assets verbatim.
 7. **Gate 1 Approval**: Present the complete specification in `task_plan.md`. Obtain explicit user approval before writing code.
@@ -102,8 +102,8 @@ For each vertical feature slice:
 ## ✨ Phase 4: P — Polish (Refinement, UI & Quality)
 
 1. **Payload & Formatting**: Refine outward-facing output formats (emails, reports, notifications, UI copy).
-2. **Design Audit**: Audit components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
-3. **Accessibility & UX**: Audit with `/web-design-guidelines`. Verify WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
+2. **Design Audit**: Use `/impeccable` to steer and polish components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
+3. **Accessibility & UX**: Aesthetic steering does not prove accessibility—audit with `/web-design-guidelines`. Verify real WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
 4. **State Completeness**: Ensure every view handles 5 essential states: Loading, Empty, Success, Partial Error, and Fatal Error.
 5. **Framework Performance**: For React/Next.js, adhere to `/vercel-react-best-practices`. Sanitize bundles to ensure no environment secrets leak client-side.
 6. **User Review**: Demonstrate working flows via `/browser` or screenshots and receive review approval before proceeding to deployment.
@@ -126,9 +126,10 @@ Do not deploy until all items are validated and logged in `progress.md`, or expl
 - [ ] Documented rollback procedure verified.
 - [ ] Cost caps and budget alerts set (T1+).
 - [ ] Staging smoke test passed via `/browser`.
+- [ ] Deployment follows the Deploy Rule (Execution Step 1): `git status` is clean, `.gitignore` and platform ignore files exclude secrets, and staging/preview comes first.
 
 ### Execution Steps
-1. **Deploy Committed Code Only**: Deploy through the platform's Git integration, a CI/CD runner, or the official platform CLI (on Ask) from a clean, committed tree. Never upload raw workspace archives or use file-upload MCP deploy tools. Connect infrastructure MCPs only for this phase in read-only mode, and disconnect immediately after.
+1. **Deploy Rule**: Deploy only committed code, through Git (the platform's Git integration or CI) or the platform's own CLI with the user's approval. Before any CLI deploy: `git status` is clean, ignore files (`.gitignore` and the platform's ignore file) are verified to exclude secrets, and staging or preview comes first. Never use tools that upload a local folder or file contents as tool arguments (for example `deploy-to-vercel`, `cloud-run/deploy-local-folder`, or inline MCP file deploys). Connect infrastructure MCPs only for this phase in read-only mode, and disconnect immediately after.
 2. **CI/CD Enforcement**: Merges must require green automated checks on feature branches.
 3. **Resilience & Scaling**: Configure CDN caching headers, load-balancer health probes, and connection pooling (see `references/caching-and-scaling.md`).
 4. **Maintenance & Handoff**: Finalize `architecture/maintenance.md` with operational runbooks, rollback steps, secret rotation guides, and revisit triggers for Deferred layers. Run `/learn` to store project adjustments.

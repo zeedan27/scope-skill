@@ -45,14 +45,14 @@ File path: `~/.gemini/antigravity-cli/settings.json` (or platform equivalent)
 }
 ```
 
-*Key Rule:* `Deny` rules strictly override `Ask` rules. Destructive infrastructure teardowns and upload-based deploy tools remain permanently blocked. Platform CLIs stay on Ask and must deploy committed code only (see `skills-and-safety.md`, Section 1).
+*Key Rule:* `Deny` rules strictly override `Ask` rules (both Unix and Windows `.ssh` paths are denied). Follow the Deploy Rule (`references/skills-and-safety.md`, Section 1): deploy only committed code, through Git (the platform's Git integration or CI) or the platform's own CLI with the user's approval. Before any CLI deploy: `git status` is clean, ignore files (`.gitignore` and the platform's ignore file) are verified to exclude secrets, and staging or preview comes first. Never use tools that upload a local folder or file contents as tool arguments (for example `deploy-to-vercel`, `cloud-run/deploy-local-folder`, or inline MCP file deploys). Keep `cloud-run/deploy-local-folder` in `deny`.
 
 ---
 
 ## 2. Project Hooks
 File path: `<project>/.agents/hooks.json`
 
-Execute typechecks and linters upon task completion rather than after individual edits to avoid false stops during multi-file refactoring:
+Execute typechecks and linters upon task completion rather than after individual edits to avoid false stops during multi-file refactoring. Require hook commands to be quoted and avoid bare `.sh` hook commands so hooks run reliably on Windows and Unix:
 
 ```json
 {
@@ -61,7 +61,7 @@ Execute typechecks and linters upon task completion rather than after individual
     "Stop": [
       {
         "hooks": [
-          { "type": "command", "command": "npx tsc --noEmit", "timeout": 60 }
+          { "type": "command", "command": "\"npx\" tsc --noEmit", "timeout": 60 }
         ]
       }
     ]
@@ -91,7 +91,7 @@ jobs:
 ---
 
 ## 4. MCP Server Configurations
-Every server here must appear in the MCP inventory in `skills-and-safety.md` (Section 3). Local (`npx`) servers are version-pinned. Remote HTTP servers such as context7 cannot be pinned; they fall under the remote-MCP exception in the vetting checklist (official endpoint, keyless/read-only, recorded in `architecture/decisions.md`).
+Every server here must appear in the MCP inventory in `references/skills-and-safety.md` (Section 3). `npx`, `uvx`, `go install`, and Docker images must use exact pinned versions, never `@latest` or an untagged image. The exception is remote HTTP MCP servers (for example `context7`), which cannot be version-pinned. For those: use only the official vendor endpoint, put no keys in the committed workspace config, and restrict tools with `enabledTools`/`disabledTools` where possible.
 
 ### Global Config (Private Keys Allowed)
 File path: `~/.gemini/config/mcp_config.json`

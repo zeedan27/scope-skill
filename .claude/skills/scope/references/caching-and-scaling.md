@@ -16,7 +16,7 @@ Consult these reference standards whenever Layers 9, 10, or 11 are marked Requir
 ---
 
 ## 2. Application-Level Caching
-- **Next.js (v16.3+):** Migrate deprecated `revalidate` and `dynamic` exports to `"use cache"` and `cacheComponents: true`. Validate caching behavior with Playwright tests (optional pinned Playwright MCP; see `skills-and-safety.md`, Section 3).
+- **Next.js (`next-cache-components` skills — Next.js only; confirm your version):** Migrate deprecated `revalidate` and `dynamic` exports to `"use cache"` and `cacheComponents: true`. Validate caching behavior with Playwright tests (optional pinned Playwright MCP; see `references/skills-and-safety.md`, Section 3).
 - **Redis & In-Memory Stores:**
   - Enforce explicit TTLs on all cache keys.
   - Group pipeline requests to minimize network roundtrips.

@@ -83,26 +83,26 @@ Copy this table into `findings.md` during Phase 1 (Specification):
 - **Security & RLS:** Implement Row-Level Security (RLS) on all user-owned records with default-deny policies. Ensure database views execute with `security_invoker`. Run dependency audit scans prior to deployment.
 - **Rate Limiting:** Protect public authentication, AI inference, and search endpoints. Return HTTP 429 with `Retry-After` headers. Roll out in dry-run/logging mode before enforcing.
 - **Caching & CDN:** Leverage immutable caching for content-hashed assets (`max-age=31536000`). Never cache authenticated API endpoints or private user sessions in shared/public caches.
-- **Hosting & CI/CD:** Deploy only committed code via the platform's Git integration, CI pipelines, or the official platform CLI (on Ask); never via raw workspace uploads. Maintain strict separation between dev, staging, and production credentials. Test rollbacks.
+- **Hosting & CI/CD:** Follow the Deploy Rule (`references/skills-and-safety.md`, Section 1): deploy only committed code, through Git (the platform's Git integration or CI) or the platform's own CLI with the user's approval. Before any CLI deploy: `git status` is clean, ignore files (`.gitignore` and the platform's ignore file) are verified to exclude secrets, and staging or preview comes first. Never use tools that upload a local folder or file contents as tool arguments (for example `deploy-to-vercel`, `cloud-run/deploy-local-folder`, or inline MCP file deploys). Maintain strict separation between dev, staging, and production credentials. Test rollbacks.
 - **Scaling & Compute:** Set budget limits and instance ceilings. Configure health probes (`/healthz/live`, `/healthz/ready`, plus `/healthz/startup` for slow-booting services) and ensure graceful shutdown handling.
 - **Observability:** Emit structured JSON logs with correlation IDs, timestamps, and error stacks. Route critical alerts to actionable notification channels.
 
 ---
 
 ## 5. Layer → Skill / Tool Map
-Summary only. Install guardrails, versions, and permission posture for every entry live in `skills-and-safety.md` (Sections 2–4).
+Summary only. Install guardrails, conditions, and permission posture for every entry live in `references/skills-and-safety.md` (Sections 2–4).
 
 | Layer | Recommended Skills & Tools |
 |---|---|
 | **1 Frontend** | `/impeccable`, `/frontend-design`, `/web-design-guidelines`, `/vercel-react-best-practices`, `/browser` |
-| **2 APIs & Backend** | context7 MCP (live documentation lookup) |
+| **2 APIs & Backend** | `context7` MCP (live documentation lookup) |
 | **3, 4, 8 DB, Auth, Security** | `/supabase` skill + Supabase MCP (when Supabase is chosen) |
-| **Payments (within 2 & 8)** | `/stripe-best-practices` |
+| **Payments (within 2 & 8)** | `/stripe-best-practices` + Stripe MCP (when Stripe is chosen) |
 | **5 Hosting & Deployment** | Platform Git integration; one pack: Vercel, Render, Railway, or Fly.io |
-| **6 Cloud & Compute** | Cloudflare (`wrangler`), Cloud Run, AWS, or Terraform MCP (T2) — read-only |
+| **6 Cloud & Compute** | Cloudflare (`wrangler`, `workers-best-practices`), GCP Cloud Run MCP, or Terraform MCP (T2) — see `references/skills-and-safety.md` |
 | **7 CI/CD & Version Control** | Native git worktree tools; GitHub MCP (scoped, narrow toolsets) |
 | **9 Rate Limiting** | One of `upstash-ratelimit-js` or `arcjet` (dry-run first) |
-| **10 Caching & CDN** | `redis-best-practices` (if Redis); Next.js cache skills (16.3+); `caching-and-scaling.md` |
-| **11 Load Balancing & Scaling** | Platform scaling skill; `caching-and-scaling.md`; Kubernetes MCP only at T2 |
+| **10 Caching & CDN** | `redis-best-practices` (if Redis); `references/caching-and-scaling.md` (incl. Next.js caching) |
+| **11 Load Balancing & Scaling** | `references/caching-and-scaling.md` (probes, pooling, autoscaling) |
 | **12 Observability** | `/systematic-debugging` for root-cause diagnosis; Sentry/Datadog for prod |
 | **All Layers** | `/verification-before-completion` before marking any slice complete |
