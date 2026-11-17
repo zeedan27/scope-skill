@@ -12,7 +12,7 @@ Before conducting reconnaissance, classify the target into one of three authoriz
 - **Tier C (Third-Party Reference):** Public sites evaluated for competitive analysis, layout inspiration, or interaction patterns.
   - Inspect only as a standard public visitor.
   - Review `robots.txt` and terms of service.
-  - **Zero crawling, zero credential bypass, zero private API reverse-engineering.**
+  - **Zero crawling, zero credential bypass, zero private API reverse-engineering.** Network inspection is limited to public, unauthenticated requests your own visitor session makes; observe shapes, never replay, fuzz, or enumerate endpoints.
 
 *Default:* If classification is uncertain, enforce Tier C constraints.
 
@@ -24,7 +24,7 @@ Before conducting reconnaissance, classify the target into one of three authoriz
 |---|---|
 | Rendered DOM structure, computed CSS styles, design tokens, breakpoints, layout flow | Backend application code, worker pipelines, database structure, private microservices |
 | Public typography scales, color palettes, spacing variables | Storage architectures, database RLS policies, internal security models |
-| Network payload contracts, public API endpoints, status codes, response headers | Environment secrets, proprietary ML weights, background jobs |
+| Network payload contracts of public, unauthenticated calls, status codes, response headers | Environment secrets, proprietary ML weights, background jobs, authenticated/private APIs |
 | Client-side framework signatures, CDN providers | Internal admin workflows, multi-tenant boundaries |
 
 ---
@@ -40,7 +40,7 @@ Before conducting reconnaissance, classify the target into one of three authoriz
 
 ## 4. Inspection Tools
 - **Core (Built-in):** Built-in `/browser`. Captures rendered layouts across responsive breakpoints (390px, 768px, 1280px), evaluates console errors, and tracks network calls.
-- **Optional (Vetted Local Tools):** Local token extractors (e.g. `designlang`) outputting directly to `.tmp/recon/`.
+- **Optional (Vetted Local Tools):** Local token extractors (e.g. `designlang`) outputting directly to `.tmp/recon/`. A tool is "vetted" only after it passes the checklist in `skills-and-safety.md` (Section 8) and is recorded in `architecture/decisions.md`. Never use login or stealth modes.
 - **Prohibited:** Hosted scraping proxies, bot stealth scripts, and unvetted browser automation extensions.
 
 ---
@@ -48,7 +48,7 @@ Before conducting reconnaissance, classify the target into one of three authoriz
 ## 5. Workflow: Inspect → Synthesize → Rebuild → Verify
 1. **Classify:** Record target classification (Tier A/B/C) and URL in `findings.md`.
 2. **Inspect:** Review target in `/browser` at mobile, tablet, and desktop breakpoints. Observe state handling and transitions.
-3. **Trace Flows:** Inspect network calls to understand public data shapes and UX lifecycle events.
+3. **Trace Flows:** Inspect the public, unauthenticated network calls your visitor session makes to understand data shapes and UX lifecycle events (Tier C: observe only).
 4. **Synthesize:** Document findings in `findings.md` in your own words: architecture guesses, responsive design patterns, and improvements.
 5. **Establish Design Tokens:** Transfer color palettes, spacing, and typography into `DESIGN.md`. Maintain `DESIGN.md` as the unified source of truth.
 6. **Cleanroom Rebuild:** Construct application components independently from your approved Specification and schema definitions.

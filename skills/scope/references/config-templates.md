@@ -30,7 +30,8 @@ File path: `~/.gemini/antigravity-cli/settings.json` (or platform equivalent)
       "write_file(.env)",
       "write_file(.git/)",
       "write_file(/Users/*/.ssh)",
-      "write_file(C:\\Users\\*\\.ssh)"
+      "write_file(C:\\Users\\*\\.ssh)",
+      "mcp(cloud-run/deploy-local-folder)"
     ],
     "ask": [
       "unsandboxed(*)",
@@ -38,14 +39,13 @@ File path: `~/.gemini/antigravity-cli/settings.json` (or platform equivalent)
       "command(regex:npm (install|i) .*)",
       "command(regex:(vercel|railway|wrangler|render|fly|gcloud|terraform|pulumi) .*)",
       "mcp(render/approve_blueprint)",
-      "mcp(arcjet/promote-rule)",
-      "mcp(cloud-run/deploy-local-folder)"
+      "mcp(arcjet/promote-rule)"
     ]
   }
 }
 ```
 
-*Key Rule:* `Deny` rules strictly override `Ask` rules. Destructive infrastructure teardowns remain permanently blocked.
+*Key Rule:* `Deny` rules strictly override `Ask` rules. Destructive infrastructure teardowns and upload-based deploy tools remain permanently blocked. Platform CLIs stay on Ask and must deploy committed code only (see `skills-and-safety.md`, Section 1).
 
 ---
 
@@ -91,6 +91,7 @@ jobs:
 ---
 
 ## 4. MCP Server Configurations
+Every server here must appear in the MCP inventory in `skills-and-safety.md` (Section 3). Local (`npx`) servers are version-pinned. Remote HTTP servers such as context7 cannot be pinned; they fall under the remote-MCP exception in the vetting checklist (official endpoint, keyless/read-only, recorded in `architecture/decisions.md`).
 
 ### Global Config (Private Keys Allowed)
 File path: `~/.gemini/config/mcp_config.json`
@@ -127,6 +128,8 @@ File path: `<project>/.agents/mcp_config.json`
 
 ## 5. UI Rule Specification
 File path: `<project>/.agents/rules/ui-components.md`
+
+This rule is not shipped with the skill. Create it during Phase 2 for UI projects (Phase 2 verifies its `trigger:` frontmatter).
 
 ```markdown
 ---

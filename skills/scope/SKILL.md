@@ -9,7 +9,7 @@ This skill provides the end-to-end engineering protocol. Short, always-on rules 
 
 Read supporting references only when prompted by a specific phase:
 - `references/stack-matrix.md`: The 12-layer stack, tier definitions (T0/T1/T2), and layer build standards.
-- `references/skills-and-safety.md`: Skill/MCP inventory, platform packs, strict vetting checklist, and permission posture.
+- `references/skills-and-safety.md`: Built-in commands, skill & MCP inventory, platform packs, skill budget, strict vetting checklist, and permission posture.
 - `references/config-templates.md`: Settings, hooks, MCP configs, git secret scanning, and UI rule templates.
 - `references/caching-and-scaling.md`: Cache-control headers, Redis patterns, rate-limit rollouts, probes, and autoscaling.
 - `references/recon.md`: Safe inspection of existing sites (authorization tiers, safety rules, cleanroom recreation).
@@ -25,16 +25,16 @@ Read supporting references only when prompted by a specific phase:
 ---
 
 ## Phase → Skill & Tool Map
-Invoke specialized skills by name when needed; autonomous discovery can be unreliable.
+Invoke specialized skills by name when needed; autonomous discovery can be unreliable. Every item below is inventoried, with its install guardrails, in `references/skills-and-safety.md`.
 
 | Phase | Skills & Tools |
 |---|---|
 | **0. Init** | Built-in `/skills`, `/hooks`, `/mcp` to verify runtime configuration |
 | **1. Specification** | `/grill-me` (discovery), `/plan`, `/frontend-design` & `/impeccable init` (UI projects), `/browser` (recon only) |
-| **2. Connections** | context7 MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected |
+| **2. Connections** | context7 MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected; GitHub MCP (scoped) |
 | **3. Organization** | context7 before library/SDK calls; `/supabase`, `/stripe-best-practices` if in stack; `/systematic-debugging` on errors; `/verification-before-completion` on slice completion |
 | **4. Polish** | `/impeccable` (polish, critique, audit), `/web-design-guidelines`, `/vercel-react-best-practices` (React/Next), `/browser` |
-| **5. Execution** | `/browser` staging smoke tests; read-only infrastructure MCPs; `/learn` to record session learnings |
+| **5. Execution** | `/browser` staging smoke tests; chosen platform pack; read-only infrastructure & observability MCPs; `/learn` to record session learnings |
 
 ---
 
@@ -59,7 +59,7 @@ Invoke specialized skills by name when needed; autonomous discovery can be unrel
 3. **Data-First Modeling**: In `architecture/schemas.md`, define input/output payload shapes, database entities/relations, roles/permissions matrix (for RLS), and API response/error contracts.
 4. **Visual Direction (UI)**: Initialize `PRODUCT.md` and define token palettes, type scale, and layouts in `DESIGN.md`. `DESIGN.md` is the single source of truth for visual tokens.
 5. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` covering critical assets, threat vectors, and mitigations.
-6. **Reconnaissance (Optional)**: If analyzing an existing reference site, consult `references/recon.md` and confirm the authorization class. Inspect layout and network flows using `/browser`. Never copy code, text, or assets verbatim.
+6. **Reconnaissance (Optional)**: If analyzing an existing reference site, consult `references/recon.md` and confirm the authorization class. Inspect layout and public, unauthenticated network flows using `/browser`. Never copy code, text, or assets verbatim.
 7. **Gate 1 Approval**: Present the complete specification in `task_plan.md`. Obtain explicit user approval before writing code.
 
 ---
@@ -122,13 +122,13 @@ Do not deploy until all items are validated and logged in `progress.md`, or expl
 - [ ] Database migrations execute cleanly; backup verified (T1+).
 - [ ] Dependency security audit clean.
 - [ ] Structured logging and error tracker verified with a test event.
-- [ ] Health and readiness endpoints (`/healthz/live`, `/healthz/ready`) verified.
+- [ ] Health and readiness endpoints (`/healthz/live`, `/healthz/ready`, and `/healthz/startup` if startup is slow) verified.
 - [ ] Documented rollback procedure verified.
 - [ ] Cost caps and budget alerts set (T1+).
 - [ ] Staging smoke test passed via `/browser`.
 
 ### Execution Steps
-1. **Deploy Exclusively via Git**: Push to the platform's Git integration or CI/CD runner. Never upload raw workspace archives or unauthenticated binaries. Connect infrastructure MCPs only for this phase in read-only mode, and disconnect immediately after.
+1. **Deploy Committed Code Only**: Deploy through the platform's Git integration, a CI/CD runner, or the official platform CLI (on Ask) from a clean, committed tree. Never upload raw workspace archives or use file-upload MCP deploy tools. Connect infrastructure MCPs only for this phase in read-only mode, and disconnect immediately after.
 2. **CI/CD Enforcement**: Merges must require green automated checks on feature branches.
 3. **Resilience & Scaling**: Configure CDN caching headers, load-balancer health probes, and connection pooling (see `references/caching-and-scaling.md`).
 4. **Maintenance & Handoff**: Finalize `architecture/maintenance.md` with operational runbooks, rollback steps, secret rotation guides, and revisit triggers for Deferred layers. Run `/learn` to store project adjustments.

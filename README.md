@@ -127,7 +127,7 @@ skills/scope/
 │   └── AGENTS.template.md            # The always-on project constitution (AGENTS.md)
 └── references/
     ├── stack-matrix.md               # The 12 infrastructure layers & tier standards
-    ├── skills-and-safety.md          # Skill inventory, platform packs & vetting rules
+    ├── skills-and-safety.md          # Built-ins, skill & MCP inventory, packs, vetting
     ├── config-templates.md           # Permissions, hooks, MCP configs & UI rules
     ├── caching-and-scaling.md        # Cache headers, Redis, probes & scaling limits
     └── recon.md                      # Safe inspection of reference websites

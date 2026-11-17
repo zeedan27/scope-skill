@@ -16,7 +16,7 @@ Consult these reference standards whenever Layers 9, 10, or 11 are marked Requir
 ---
 
 ## 2. Application-Level Caching
-- **Next.js (v16.3+):** Migrate deprecated `revalidate` and `dynamic` exports to `"use cache"` and `cacheComponents: true`. Validate behaviors using Playwright instant tests.
+- **Next.js (v16.3+):** Migrate deprecated `revalidate` and `dynamic` exports to `"use cache"` and `cacheComponents: true`. Validate caching behavior with Playwright tests (optional pinned Playwright MCP; see `skills-and-safety.md`, Section 3).
 - **Redis & In-Memory Stores:**
   - Enforce explicit TTLs on all cache keys.
   - Group pipeline requests to minimize network roundtrips.
@@ -40,7 +40,7 @@ Consult these reference standards whenever Layers 9, 10, or 11 are marked Requir
 - **Health Probes:**
   - *Liveness (`/healthz/live`):* Verifies process responsiveness. Never include external dependencies (e.g. databases), avoiding cascading service restarts during downstream outages.
   - *Readiness (`/healthz/ready`):* Checks database, cache, and downstream connectivity. Balancers pull instances out of traffic upon failure.
-  - *Startup (`/healthz/startup`):* Shields slow initialization processes from premature termination.
+  - *Startup (`/healthz/startup`):* Shields slow initialization processes from premature termination. Optional; include in Gate 2 only when the service has a slow boot.
 - **Graceful Termination:** Upon receiving `SIGTERM`:
   1. Transition readiness probe to HTTP 503.
   2. Wait a brief drain period (5–10s) to allow upstream proxies to update routes.
