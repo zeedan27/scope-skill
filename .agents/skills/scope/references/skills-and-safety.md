@@ -24,6 +24,9 @@ The S.C.O.P.E. framework governs the **lifecycle process** (phases, decision gat
 ## 2. Skill Inventory
 Every skill, slash command, and MCP server referenced by `SKILL.md`, `templates/AGENTS.template.md`, `references/stack-matrix.md`, `references/recon.md`, `references/caching-and-scaling.md`, or `references/config-templates.md` is inventoried here (Sections 2–4).
 
+- **Slash commands (`/name`):** Built-in UI/CLI shortcuts (Section 2a).
+- **Skills (`name`):** `SKILL.md` packages (Sections 2b–2d and Section 4). Activate them by calling `read_file` on `<skill-dir>/SKILL.md` (under `<skills>`, `.agents/skills/`, `.claude/skills/`, `~/.gemini/config/skills/`, or `~/.claude/skills/`), never by treating them as `/slash-commands`.
+
 ### 2a. Built-in Slash Commands (Zero Install)
 These ship with the agent runtime and do not count toward the skill limit.
 
@@ -37,30 +40,35 @@ These ship with the agent runtime and do not count toward the skill limit.
 | `/learn` | Persist session learnings and project adjustments | 5 |
 
 ### 2b. Universal Core Skills
-| Skill | Job | Phase |
-|---|---|---|
-| `scope` | The overarching lifecycle and gating protocol | All |
-| `verification-before-completion` | Require fresh test proof before claiming completion | 3, all slices |
-| `systematic-debugging` | Multi-phase root-cause investigation; powers self-annealing | 3, 5, on errors |
+| Skill | Job | Phase | Source / Install Command |
+|---|---|---|---|
+| `scope` | The overarching lifecycle and gating protocol | All | `npx skills add zeedan27/scope-skill --skill scope` |
+| `verification-before-completion` | Require fresh test proof before claiming completion | 3, all slices | `npx skills add obra/superpowers --skill verification-before-completion` |
+| `systematic-debugging` | Multi-phase root-cause investigation; powers self-annealing | 3, 5, on errors | `npx skills add obra/superpowers --skill systematic-debugging` |
 
 ### 2c. Frontend & UI Skills (Conditional — UI projects only)
-| Skill | Condition | Job | Phase |
-|---|---|---|---|
-| `frontend-design` | UI projects (pick one: `frontend-design` or `design-taste-frontend`) | One-time aesthetic direction for app UIs/dashboards: palette, type, wireframes (merge into `DESIGN.md`) | 1 |
-| `design-taste-frontend` (`taste-skill`) | UI projects (pick one: `design-taste-frontend` or `frontend-design`) | Anti-slop art direction, dealt palette/type/hero tokens (merge into `DESIGN.md`), real-browser layout/perf checker, and finish gate for websites & landing pages | 1, 3, 4 |
-| `impeccable` (`/impeccable init`) | UI projects | `PRODUCT.md`/`DESIGN.md` setup, steering, polish, critique, anti-slop audit | 1, 4 |
-| `web-design-guidelines` | UI projects | Accessibility (WCAG 2.1 AA), semantic markup, and UX audits | 4 |
-| `vercel-react-best-practices` | React/Next.js UI projects | React/Next.js performance and hydration rules | 3, 4 |
+| Skill | Condition | Job | Phase | Source / Install Command |
+|---|---|---|---|---|
+| `design-taste-frontend` (`taste-skill`) | UI projects (pick one: `design-taste-frontend` or `frontend-design`) | Anti-slop art direction, dealt palette/type/hero tokens (merge into `DESIGN.md`), real-browser layout/perf checker, and finish gate for websites & landing pages | 1, 3, 4 | `npx skills add Leonxlnx/taste-skill --skill design-taste-frontend` |
+| `frontend-design` | UI projects (pick one: `frontend-design` or `design-taste-frontend`) | One-time aesthetic direction for app UIs/dashboards: palette, type, wireframes (merge into `DESIGN.md`) | 1 | `npx skills add anthropics/skills --skill frontend-design` |
+| `impeccable` | UI projects | `PRODUCT.md`/`DESIGN.md` setup, steering, polish, critique, anti-slop audit | 1, 4 | `npx skills add pbakaus/impeccable --skill impeccable` |
+| `web-design-guidelines` | UI projects | Accessibility (WCAG 2.1 AA), semantic markup, and UX audits | 4 | `npx skills add vercel-labs/agent-skills --skill web-design-guidelines` |
+| `vercel-react-best-practices` | React/Next.js UI projects | React/Next.js performance and hydration rules | 3, 4 | `npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices` |
 
 ### 2d. Conditional & Optional Skills and Tools
-| Skill / Tool | Condition | Job | Phase |
-|---|---|---|---|
-| `supabase` | Conditional: Supabase chosen (Layers 3, 4, 8) | Schema, auth, RLS, and local CLI emulation patterns | 3 |
-| `stripe-best-practices` | Conditional: payments in scope (Layers 2, 8) | Checkout, webhook verification, and sandbox testing | 3 |
-| `designlang` | Optional: during recon after Section 6 vetting | Local design-token extractor outputting to `.tmp/recon/` (`references/recon.md`) | 1 |
+| Skill / Tool | Condition | Job | Phase | Source / Install Command |
+|---|---|---|---|---|
+| `supabase` | Conditional: Supabase chosen (Layers 3, 4, 8) | Schema, auth, RLS, and local CLI emulation patterns | 3 | `npx skills add supabase/agent-skills --skill supabase` |
+| `stripe-best-practices` | Conditional: payments in scope (Layers 2, 8) | Checkout, webhook verification, and sandbox testing | 3 | `npx skills add stripe/ai --skill stripe-best-practices` |
+| `designlang` | Optional: during recon after Section 6 vetting | Local design-token extractor outputting to `.tmp/recon/` (`references/recon.md`) | 1 | Local CLI extractor (`references/recon.md`; vet per Section 6) |
 
 ### 2e. Skill Count Rule
 Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count). Each chosen platform pack (Section 4) adds at most 1–2 skills, and a new skill must replace or clearly beat an existing one.
+
+### 2f. Missing-Skill Protocol — Never Improvise Alone
+1. **Check local installation:** Look in your loaded `<skills>` list and local skill directories (`.agents/skills/`, `.claude/skills/`, `~/.gemini/config/skills/`, `~/.claude/skills/`).
+2. **Stop and ask before bypassing:** If a skill required for the active phase (especially `design-taste-frontend` or `frontend-design` plus `impeccable` in Phase 1 for UI projects) is missing, **do not invent the design or workflow yourself**. Present the exact `npx skills add` command from Tables 2b–2d (append `-g` for global install) and ask the user whether to install it or explicitly approve skipping it.
+3. **Read before designing:** Once installed (or already present), call `read_file` on its `SKILL.md` and follow its workflow before authoring `PRODUCT.md`, `DESIGN.md`, or implementation code.
 
 ---
 
@@ -92,17 +100,17 @@ Install only the specific skill required for your chosen stack; avoid mass insta
 
 | Layer | Platform | Target Skill / MCP (Conditional) | Phase | Job & Guardrails |
 |---|---|---|---|---|
-| 5 | **Vercel** | Git integration; optional `vercel-optimize` (T1+) | 5 | Usage & route audit; follow the Deploy Rule (Section 1). |
+| 5 | **Vercel** | Git integration; optional `vercel-optimize` (`vercel-labs/agent-skills`, T1+) | 5 | Usage & route audit; follow the Deploy Rule (Section 1). |
 | 5 | **Render** | Individual skills from `render-oss/skills` + Render MCP | 5 | Blueprints & service logs; keep `render/approve_blueprint` on Ask; follow the Deploy Rule (Section 1). |
-| 5, 6 | **Railway** | `use-railway` CLI skill | 5 | Service management; follow the Deploy Rule (Section 1); CLI on Ask. |
+| 5, 6 | **Railway** | `use-railway` CLI skill (`railwayapp/railway-skills`) | 5 | Service management; follow the Deploy Rule (Section 1); CLI on Ask. |
 | 5 | **Fly.io** | `fly` skill (`superfly/skills`) | 5 | App config & releases; pin version; follow the Deploy Rule (Section 1); CLI on Ask. |
-| 6 | **Cloudflare** | `wrangler` CLI + `workers-best-practices` (+ Cloudflare MCP) | 3, 5 | Worker patterns & releases; follow the Deploy Rule (Section 1); MCP read-only telemetry. |
+| 6 | **Cloudflare** | `wrangler` CLI + `workers-best-practices` (`cloudflare/skills`) (+ Cloudflare MCP) | 3, 5 | Worker patterns & releases; follow the Deploy Rule (Section 1); MCP read-only telemetry. |
 | 6 | **GCP Cloud Run** | `cloud-run-mcp` (+ `gcloud` CLI) | 5 | Service inspection & releases; follow the Deploy Rule (Section 1); `cloud-run/deploy-local-folder` denied; set max instances and billing cap. |
 | 6 | **IaC (Terraform / Pulumi)** | `hashicorp/terraform-mcp-server` (or `pulumi` CLI, Optional) | 3, 5 | Registry lookup / IaC plans (T2); operational writes and destroys denied; `plan` before `apply`. |
-| 3, 4, 8 | **Supabase** | `supabase` skill + Supabase MCP | 2, 3 | Local CLI emulation, schema & RLS verification; protect service-role keys. |
-| 2, 8 | **Stripe** | `stripe-best-practices` + Stripe MCP | 2, 3 | Checkout & webhook safety; restrict tests to Stripe sandbox environments. |
-| 9 | **Rate Limiting** | Choose **one**: `upstash-ratelimit-js` (+ Upstash MCP) or `arcjet` (+ Arcjet MCP) | 3, 5 | Endpoint throttling; dry-run first; `arcjet/promote-rule` on Ask. |
-| 10 | **Redis & Caching** | `redis-best-practices` (+ optional Redis MCP); Next.js caching pointer → `references/caching-and-scaling.md` | 3, 5 | Redis TTL/key patterns (`SCAN`, never `KEYS *`). Next.js `next-cache-components` skills (Conditional: Next.js only; confirm your version) live in `references/caching-and-scaling.md` (Section 2). |
+| 3, 4, 8 | **Supabase** | `supabase` skill (`supabase/agent-skills`) + Supabase MCP | 2, 3 | Local CLI emulation, schema & RLS verification; protect service-role keys. |
+| 2, 8 | **Stripe** | `stripe-best-practices` (`stripe/ai`) + Stripe MCP | 2, 3 | Checkout & webhook safety; restrict tests to Stripe sandbox environments. |
+| 9 | **Rate Limiting** | Choose **one**: `upstash-ratelimit-js` (`upstash/skills` + Upstash MCP) or `arcjet` (+ Arcjet MCP) | 3, 5 | Endpoint throttling; dry-run first; `arcjet/promote-rule` on Ask. |
+| 10 | **Redis & Caching** | `redis-best-practices` (`upstash/skills`, + optional Redis MCP); Next.js caching pointer → `references/caching-and-scaling.md` | 3, 5 | Redis TTL/key patterns (`SCAN`, never `KEYS *`). Next.js `next-cache-components` skills (Conditional: Next.js only; confirm your version) live in `references/caching-and-scaling.md` (Section 2). |
 | 12 | **Observability** | Sentry / Datadog (+ read-only MCP) | 5 | Error tracking & alert routing; confirm test event before Gate 2. |
 
 **AWS and Kubernetes:** Not in the default packs. Only on explicit need: read-only credentials or toolsets, and run the vetting checklist first.

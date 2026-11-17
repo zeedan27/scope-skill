@@ -7,7 +7,7 @@ description: Runs the S.C.O.P.E. framework (Specification, Connections, Organiza
 
 This skill provides the end-to-end engineering protocol. Short, always-on rules live in the project's root `AGENTS.md` (the Constitution). If missing, generate it during Phase 0 from `templates/AGENTS.template.md`.
 
-Read supporting references only when prompted by a specific phase:
+Always read `references/skills-and-safety.md` and `references/stack-matrix.md` during Phase 0 and Phase 1 (before drafting any plan, designing UI, or exiting plan mode). Read the other references when prompted by their phase:
 - `references/stack-matrix.md`: The 12-layer stack, tier definitions (T0/T1/T2), and layer build standards.
 - `references/skills-and-safety.md`: Built-in commands, skill & MCP inventory, platform packs, skill count rule, strict vetting checklist, and permission posture.
 - `references/config-templates.md`: Settings, hooks, MCP configs, git secret scanning, and UI rule templates.
@@ -25,15 +25,17 @@ Read supporting references only when prompted by a specific phase:
 ---
 
 ## Phase → Skill & Tool Map
-Invoke specialized skills by name when needed; autonomous discovery can be unreliable. Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count). Every item below is inventoried, with its install guardrails, in `references/skills-and-safety.md`.
+- **Skills (`name` without `/`)** are `SKILL.md` files in `<skills>`, `.agents/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md`, `~/.gemini/config/skills/<name>/SKILL.md`, or `~/.claude/skills/<name>/SKILL.md`. Activate them by calling `read_file` on their `SKILL.md`. If a required skill is not installed, **stop** and ask the user to install it using the command in `references/skills-and-safety.md` (Section 2).
+- **Built-in Slash Commands (`/name` with `/`)** are runtime/UI commands (`/grill-me`, `/plan`, `/browser`, `/learn`, `/scope`, `/skills`, `/hooks`, `/mcp`).
+- Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count). Every item below is inventoried, with its install command and guardrails, in `references/skills-and-safety.md`.
 
 | Phase | Skills & Tools |
 |---|---|
-| **0. Init** | Built-in `/skills`, `/hooks`, `/mcp` to verify runtime configuration |
-| **1. Specification** | `/grill-me` (discovery), `/plan`, `/frontend-design` or `/design-taste-frontend` (`taste-skill`) & `/impeccable init` (UI projects), `/browser` (recon only) |
-| **2. Connections** | context7 MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected; GitHub MCP (scoped) |
-| **3. Organization** | context7 before library/SDK calls; `/supabase`, `/stripe-best-practices` if in stack; `/systematic-debugging` on errors; `/verification-before-completion` on slice completion |
-| **4. Polish** | `/impeccable` (polish, critique, audit), `/design-taste-frontend` (`taste-skill` browser/finish gate, if chosen), `/web-design-guidelines`, `/vercel-react-best-practices` (React/Next), `/browser` |
+| **0. Init** | Inspect loaded `<skills>` & `<mcp_servers>` (or built-in `/skills`, `/hooks`, `/mcp`); read `references/skills-and-safety.md` |
+| **1. Specification** | `/grill-me` (discovery), `/plan`, read `design-taste-frontend` (`taste-skill`) or `frontend-design` + `impeccable` `SKILL.md` (UI projects), `/browser` (recon only) |
+| **2. Connections** | `context7` MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected; GitHub MCP (scoped) |
+| **3. Organization** | `context7` before library/SDK calls; read `supabase`, `stripe-best-practices` `SKILL.md` if in stack; read `systematic-debugging` on errors; read `verification-before-completion` on slice completion |
+| **4. Polish** | Read `impeccable` (polish, critique, audit), `design-taste-frontend` (`taste-skill` browser/finish gate, if chosen), `web-design-guidelines`, and `vercel-react-best-practices` (React/Next) `SKILL.md`; `/browser` |
 | **5. Execution** | `/browser` staging smoke tests; chosen platform pack; read-only infrastructure & observability MCPs; `/learn` to record session learnings |
 
 ---
@@ -44,7 +46,7 @@ Invoke specialized skills by name when needed; autonomous discovery can be unrel
 2. **Law Documents**: Initialize `architecture/schemas.md`, `architecture/decisions.md` (ADR log), and `architecture/maintenance.md`.
 3. **Constitution**: Copy `templates/AGENTS.template.md` to project root as `AGENTS.md` (no frontmatter). If using Claude Code, symlink `CLAUDE.md` to `AGENTS.md`.
 4. **Hygiene**: Initialize git (`git init`). Ensure `.gitignore` excludes `.env*` (except `.env.example`), `.tmp/`, `node_modules/`, and `.worktrees/`. Create `.env.example` with variable names only.
-5. **Tooling Verification**: Run `/skills` and `/mcp`. Review `references/skills-and-safety.md`.
+5. **Tooling Verification**: Read `references/skills-and-safety.md`. Check your loaded `<skills>` list and local skill directories (plus `/skills` and `/mcp`). If core or UI skills required for this project are missing, present their exact `npx skills add` commands from `references/skills-and-safety.md` and ask the user to approve installing them before planning.
 6. **Hard Halt**: Do not write application code in `src/` or `tools/` until Gate 1 passes.
 
 ---
@@ -57,10 +59,13 @@ Invoke specialized skills by name when needed; autonomous discovery can be unrel
    - *Design (UI)*: Target audience, aesthetic tone, reference products, anti-patterns.
 2. **Tier & Layer Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale). Complete the Layer Decision Table in `findings.md` using the template from `references/stack-matrix.md`.
 3. **Data-First Modeling**: In `architecture/schemas.md`, define input/output payload shapes, database entities/relations, roles/permissions matrix (for RLS), and API response/error contracts.
-4. **Visual Direction (UI)**: Initialize `PRODUCT.md` and define token palettes, type scale, and layouts in `DESIGN.md`. Run either `/frontend-design` (app UIs/dashboards) or `/design-taste-frontend` (`taste-skill`, for high-craft websites, landing pages, and product sites) once in Phase 1; merge its output (and any recon token extraction) into `DESIGN.md`, never keeping a second design file. `DESIGN.md` is the single source of truth for visual tokens.
+4. **Visual Direction (UI — Skill-Driven, Never Solo)**: Never plan or invent a website's visual design, layout, or `DESIGN.md` on your own—even when the user provides colors, fonts, or reference images. First, locate and call `read_file` on the `SKILL.md` for `design-taste-frontend` (`taste-skill`, for websites, landing pages, portfolios, and product sites) or `frontend-design` (for app UIs/dashboards) **and** `impeccable`. If missing, stop and ask the user to install them via the commands in `references/skills-and-safety.md` (Section 2c). Plan the screen-by-screen layout, typography, token palette, and interaction rules strictly using the loaded skill's workflow (e.g., `taste-skill`'s business classification, `scripts/start.mjs`, `assets/layout/deal.mjs`, and House Rules), initialize `PRODUCT.md`, and merge all visual tokens into `DESIGN.md` as the single source of truth.
 5. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` covering critical assets, threat vectors, and mitigations.
 6. **Reconnaissance (Optional)**: If analyzing an existing reference site, consult `references/recon.md` and confirm the authorization class. Inspect layout and public, unauthenticated network flows using `/browser`. Never copy code, text, or assets verbatim.
-7. **Gate 1 Approval**: Present the complete specification in `task_plan.md`. Obtain explicit user approval before writing code.
+7. **Gate 1 Approval**: Present the complete specification in `task_plan.md`. Do not write code or exit Gate 1 until every item is satisfied and the user explicitly approves:
+   - [ ] Discovery, Tier (T0/T1/T2), and 12-Layer Decision Table completed in `findings.md`.
+   - [ ] Data schemas, permissions matrix, and API contracts defined in `architecture/schemas.md`.
+   - [ ] (UI projects) `design-taste-frontend` (`taste-skill`) or `frontend-design` **and** `impeccable` `SKILL.md` files were read via `read_file` and used to plan `PRODUCT.md`, `DESIGN.md`, and the layout in `task_plan.md` (or the user explicitly approved skipping installation).
 
 ---
 
@@ -102,10 +107,10 @@ For each vertical feature slice:
 ## ✨ Phase 4: P — Polish (Refinement, UI & Quality)
 
 1. **Payload & Formatting**: Refine outward-facing output formats (emails, reports, notifications, UI copy).
-2. **Design Audit**: Use `/impeccable` (and `/design-taste-frontend`'s real-browser consistency and finish-gate checks when `taste-skill` is chosen) to steer and polish components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
-3. **Accessibility & UX**: Aesthetic steering does not prove accessibility—audit with `/web-design-guidelines`. Verify real WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
+2. **Design Audit**: Read and apply `impeccable` `SKILL.md` (and run `design-taste-frontend`'s real-browser consistency and finish-gate checks when `taste-skill` is chosen) to steer and polish components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
+3. **Accessibility & UX**: Aesthetic steering does not prove accessibility—audit against `web-design-guidelines` `SKILL.md`. Verify real WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
 4. **State Completeness**: Ensure every view handles 5 essential states: Loading, Empty, Success, Partial Error, and Fatal Error.
-5. **Framework Performance**: For React/Next.js, adhere to `/vercel-react-best-practices`. Sanitize bundles to ensure no environment secrets leak client-side.
+5. **Framework Performance**: For React/Next.js, apply `vercel-react-best-practices` `SKILL.md`. Sanitize bundles to ensure no environment secrets leak client-side.
 6. **User Review**: Demonstrate working flows via `/browser` or screenshots and receive review approval before proceeding to deployment.
 
 ---

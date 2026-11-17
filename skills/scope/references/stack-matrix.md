@@ -94,15 +94,15 @@ Summary only. Install guardrails, conditions, and permission posture for every e
 
 | Layer | Recommended Skills & Tools |
 |---|---|
-| **1 Frontend** | `/impeccable`, `/frontend-design` or `/design-taste-frontend` (`taste-skill`), `/web-design-guidelines`, `/vercel-react-best-practices`, `/browser` |
+| **1 Frontend** | `impeccable`, `frontend-design` or `design-taste-frontend` (`taste-skill`), `web-design-guidelines`, `vercel-react-best-practices`, `/browser` |
 | **2 APIs & Backend** | `context7` MCP (live documentation lookup) |
-| **3, 4, 8 DB, Auth, Security** | `/supabase` skill + Supabase MCP (when Supabase is chosen) |
-| **Payments (within 2 & 8)** | `/stripe-best-practices` + Stripe MCP (when Stripe is chosen) |
+| **3, 4, 8 DB, Auth, Security** | `supabase` skill + Supabase MCP (when Supabase is chosen) |
+| **Payments (within 2 & 8)** | `stripe-best-practices` + Stripe MCP (when Stripe is chosen) |
 | **5 Hosting & Deployment** | Platform Git integration; one pack: Vercel, Render, Railway, or Fly.io |
 | **6 Cloud & Compute** | Cloudflare (`wrangler`, `workers-best-practices`), GCP Cloud Run MCP, or Terraform MCP (T2) — see `references/skills-and-safety.md` |
 | **7 CI/CD & Version Control** | Native git worktree tools; GitHub MCP (scoped, narrow toolsets) |
 | **9 Rate Limiting** | One of `upstash-ratelimit-js` or `arcjet` (dry-run first) |
 | **10 Caching & CDN** | `redis-best-practices` (if Redis); `references/caching-and-scaling.md` (incl. Next.js caching) |
 | **11 Load Balancing & Scaling** | `references/caching-and-scaling.md` (probes, pooling, autoscaling) |
-| **12 Observability** | `/systematic-debugging` for root-cause diagnosis; Sentry/Datadog for prod |
-| **All Layers** | `/verification-before-completion` before marking any slice complete |
+| **12 Observability** | `systematic-debugging` for root-cause diagnosis; Sentry/Datadog for prod |
+| **All Layers** | `verification-before-completion` before marking any slice complete |

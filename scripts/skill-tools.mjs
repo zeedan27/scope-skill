@@ -477,6 +477,57 @@ function checkAll() {
     }
   }
 
+  // Verify skill names do not carry a leading slash (slash-command trap) in SKILL.md, stack-matrix.md, or AGENTS.template.md
+  const nonSlashSkills = [
+    "frontend-design",
+    "design-taste-frontend",
+    "impeccable",
+    "web-design-guidelines",
+    "vercel-react-best-practices",
+    "supabase",
+    "stripe-best-practices",
+    "systematic-debugging",
+    "verification-before-completion",
+  ];
+  for (const rel of ["SKILL.md", "references/stack-matrix.md", "templates/AGENTS.template.md"]) {
+    const txt = filesContent[rel] || "";
+    for (const sk of nonSlashSkills) {
+      const slashRe = new RegExp(`(^|[^A-Za-z0-9_./-])/${sk}\\b`, "i");
+      if (slashRe.test(txt)) {
+        fail(`${rel}: skill '${sk}' must not be written with a leading '/'`);
+      }
+    }
+  }
+
+  // Verify Tables 2b, 2c, and 2d in skills-and-safety.md include a Source / Install Command column
+  if (safetyMd) {
+    for (const subHeading of ["### 2b.", "### 2c.", "### 2d."]) {
+      const idx = safetyMd.indexOf(subHeading);
+      if (idx === -1) {
+        fail(`references/skills-and-safety.md: missing subsection '${subHeading}'`);
+        continue;
+      }
+      const nextIdx = safetyMd.indexOf("\n### ", idx + subHeading.length);
+      const slice = nextIdx === -1 ? safetyMd.slice(idx) : safetyMd.slice(idx, nextIdx);
+      const subTables = parseMarkdownTableRows(slice);
+      if (subTables.length === 0) {
+        fail(`references/skills-and-safety.md: missing table in '${subHeading}'`);
+        continue;
+      }
+      const { headers, rows } = subTables[0];
+      const srcIdx = headers.findIndex((h) => /source\s*\/\s*install\s*command/i.test(h));
+      if (srcIdx === -1) {
+        fail(`references/skills-and-safety.md: table in '${subHeading}' must include a 'Source / Install Command' column`);
+      } else {
+        for (const row of rows) {
+          if (!(row[srcIdx] || "").trim()) {
+            fail(`references/skills-and-safety.md: row '${row[0]}' in '${subHeading}' has empty Source / Install Command`);
+          }
+        }
+      }
+    }
+  }
+
   if (errors.length > 0) {
     console.error(`CHECK FAILED (${errors.length} issue${errors.length === 1 ? "" : "s"}):`);
     for (const err of errors) {
