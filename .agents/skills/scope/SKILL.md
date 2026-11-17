@@ -30,10 +30,10 @@ Invoke specialized skills by name when needed; autonomous discovery can be unrel
 | Phase | Skills & Tools |
 |---|---|
 | **0. Init** | Built-in `/skills`, `/hooks`, `/mcp` to verify runtime configuration |
-| **1. Specification** | `/grill-me` (discovery), `/plan`, `/frontend-design` & `/impeccable init` (UI projects), `/browser` (recon only) |
+| **1. Specification** | `/grill-me` (discovery), `/plan`, `/frontend-design` or `/design-taste-frontend` (`taste-skill`) & `/impeccable init` (UI projects), `/browser` (recon only) |
 | **2. Connections** | context7 MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected; GitHub MCP (scoped) |
 | **3. Organization** | context7 before library/SDK calls; `/supabase`, `/stripe-best-practices` if in stack; `/systematic-debugging` on errors; `/verification-before-completion` on slice completion |
-| **4. Polish** | `/impeccable` (polish, critique, audit), `/web-design-guidelines`, `/vercel-react-best-practices` (React/Next), `/browser` |
+| **4. Polish** | `/impeccable` (polish, critique, audit), `/design-taste-frontend` (`taste-skill` browser/finish gate, if chosen), `/web-design-guidelines`, `/vercel-react-best-practices` (React/Next), `/browser` |
 | **5. Execution** | `/browser` staging smoke tests; chosen platform pack; read-only infrastructure & observability MCPs; `/learn` to record session learnings |
 
 ---
@@ -57,7 +57,7 @@ Invoke specialized skills by name when needed; autonomous discovery can be unrel
    - *Design (UI)*: Target audience, aesthetic tone, reference products, anti-patterns.
 2. **Tier & Layer Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale). Complete the Layer Decision Table in `findings.md` using the template from `references/stack-matrix.md`.
 3. **Data-First Modeling**: In `architecture/schemas.md`, define input/output payload shapes, database entities/relations, roles/permissions matrix (for RLS), and API response/error contracts.
-4. **Visual Direction (UI)**: Initialize `PRODUCT.md` and define token palettes, type scale, and layouts in `DESIGN.md`. Run `/frontend-design` once in Phase 1; merge its output (and any recon token extraction) into `DESIGN.md`, never keeping a second design file. `DESIGN.md` is the single source of truth for visual tokens.
+4. **Visual Direction (UI)**: Initialize `PRODUCT.md` and define token palettes, type scale, and layouts in `DESIGN.md`. Run either `/frontend-design` (app UIs/dashboards) or `/design-taste-frontend` (`taste-skill`, for high-craft websites, landing pages, and product sites) once in Phase 1; merge its output (and any recon token extraction) into `DESIGN.md`, never keeping a second design file. `DESIGN.md` is the single source of truth for visual tokens.
 5. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` covering critical assets, threat vectors, and mitigations.
 6. **Reconnaissance (Optional)**: If analyzing an existing reference site, consult `references/recon.md` and confirm the authorization class. Inspect layout and public, unauthenticated network flows using `/browser`. Never copy code, text, or assets verbatim.
 7. **Gate 1 Approval**: Present the complete specification in `task_plan.md`. Obtain explicit user approval before writing code.
@@ -102,7 +102,7 @@ For each vertical feature slice:
 ## ✨ Phase 4: P — Polish (Refinement, UI & Quality)
 
 1. **Payload & Formatting**: Refine outward-facing output formats (emails, reports, notifications, UI copy).
-2. **Design Audit**: Use `/impeccable` to steer and polish components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
+2. **Design Audit**: Use `/impeccable` (and `/design-taste-frontend`'s real-browser consistency and finish-gate checks when `taste-skill` is chosen) to steer and polish components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
 3. **Accessibility & UX**: Aesthetic steering does not prove accessibility—audit with `/web-design-guidelines`. Verify real WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
 4. **State Completeness**: Ensure every view handles 5 essential states: Loading, Empty, Success, Partial Error, and Fatal Error.
 5. **Framework Performance**: For React/Next.js, adhere to `/vercel-react-best-practices`. Sanitize bundles to ensure no environment secrets leak client-side.

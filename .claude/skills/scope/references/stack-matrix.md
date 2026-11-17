@@ -94,7 +94,7 @@ Summary only. Install guardrails, conditions, and permission posture for every e
 
 | Layer | Recommended Skills & Tools |
 |---|---|
-| **1 Frontend** | `/impeccable`, `/frontend-design`, `/web-design-guidelines`, `/vercel-react-best-practices`, `/browser` |
+| **1 Frontend** | `/impeccable`, `/frontend-design` or `/design-taste-frontend` (`taste-skill`), `/web-design-guidelines`, `/vercel-react-best-practices`, `/browser` |
 | **2 APIs & Backend** | `context7` MCP (live documentation lookup) |
 | **3, 4, 8 DB, Auth, Security** | `/supabase` skill + Supabase MCP (when Supabase is chosen) |
 | **Payments (within 2 & 8)** | `/stripe-best-practices` + Stripe MCP (when Stripe is chosen) |

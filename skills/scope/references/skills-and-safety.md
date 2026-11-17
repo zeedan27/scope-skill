@@ -46,7 +46,8 @@ These ship with the agent runtime and do not count toward the skill limit.
 ### 2c. Frontend & UI Skills (Conditional — UI projects only)
 | Skill | Condition | Job | Phase |
 |---|---|---|---|
-| `frontend-design` | UI projects | One-time aesthetic direction: palette, type, wireframes (merge into `DESIGN.md`) | 1 |
+| `frontend-design` | UI projects (pick one: `frontend-design` or `design-taste-frontend`) | One-time aesthetic direction for app UIs/dashboards: palette, type, wireframes (merge into `DESIGN.md`) | 1 |
+| `design-taste-frontend` (`taste-skill`) | UI projects (pick one: `design-taste-frontend` or `frontend-design`) | Anti-slop art direction, dealt palette/type/hero tokens (merge into `DESIGN.md`), real-browser layout/perf checker, and finish gate for websites & landing pages | 1, 3, 4 |
 | `impeccable` (`/impeccable init`) | UI projects | `PRODUCT.md`/`DESIGN.md` setup, steering, polish, critique, anti-slop audit | 1, 4 |
 | `web-design-guidelines` | UI projects | Accessibility (WCAG 2.1 AA), semantic markup, and UX audits | 4 |
 | `vercel-react-best-practices` | React/Next.js UI projects | React/Next.js performance and hydration rules | 3, 4 |
@@ -144,5 +145,5 @@ Before installing any new agent skill, package, or MCP server:
 ## 8. Operational Gotchas & Platform Compatibility
 - **Rule Frontmatter:** In Antigravity, `.agents/rules/*.md` files require valid snake_case `trigger:` frontmatter (`always_on`, `model_decision`, `glob`, `manual`). Unrecognized triggers are ignored. Root `AGENTS.md` takes no frontmatter.
 - **Nesting Limits:** Skills are discovered one level deep: `skills/<name>/SKILL.md`.
-- **Cross-Platform Tooling:** Hooks in Antigravity use native tool names (`run_command`, `write_file`, etc.), whereas Claude Code relies on its own tool nomenclature. Keep hook commands quoted and avoid bare `.sh` hook commands on Windows.
+- **Cross-Platform Tooling:** Hooks in Antigravity use native tool names (`run_command`, `write_file`, etc.), whereas Claude Code relies on its own tool nomenclature. Keep hook commands quoted and avoid bare `.sh` hook commands on Windows. If `design-taste-frontend` (`taste-skill`) is used on Windows, invoke its `gate.mjs` script via a quoted `node` command rather than a POSIX `for f in ...` shell hook, and ignore `.taste-skill/` in `.gitignore`.
 - **Secret Separation:** Workspace configs (`.agents/mcp_config.json`) are committed to version control and must remain completely secret-free. Personal API keys belong solely in global user configuration files.

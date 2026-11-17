@@ -162,6 +162,7 @@ dist/
 
 # Intermediates & Recon
 .tmp/
+.taste-skill/
 *.har
 cookies.json
 

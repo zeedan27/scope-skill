@@ -142,6 +142,8 @@ function extractReferencedTools(filesContentMap) {
           "verification-before-completion",
           "systematic-debugging",
           "frontend-design",
+          "design-taste-frontend",
+          "taste-skill",
           "impeccable",
           "web-design-guidelines",
           "vercel-react-best-practices",
