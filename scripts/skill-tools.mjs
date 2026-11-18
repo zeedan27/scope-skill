@@ -528,6 +528,24 @@ function checkAll() {
     }
   }
 
+  // Verify rolling skill-first phase planning and phase-boundary checkpoints
+  for (const requiredMarker of [
+    "Phase 2 Checkpoint",
+    "Phase 3 Checkpoint",
+    "Phase 4 Checkpoint",
+    "Skill-First Phase 2 Plan",
+    "Skill-First Phase 3 Plan",
+    "Skill-First Phase 4 Plan",
+    "Skill-First Phase 5 Plan",
+  ]) {
+    if (!skillMd.includes(requiredMarker)) {
+      fail(`SKILL.md: missing '${requiredMarker}' rule`);
+    }
+  }
+  if (!agentsMd.includes("Phase-Boundary Checkpoints")) {
+    fail("templates/AGENTS.template.md: missing 'Phase-Boundary Checkpoints' rule");
+  }
+
   if (errors.length > 0) {
     console.error(`CHECK FAILED (${errors.length} issue${errors.length === 1 ? "" : "s"}):`);
     for (const err of errors) {

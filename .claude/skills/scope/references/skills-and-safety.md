@@ -13,7 +13,7 @@
 ---
 
 ## 1. Architectural Division of Labor
-The S.C.O.P.E. framework governs the **lifecycle process** (phases, decision gates, law documents). Specialized skills and MCP tools are **tactical procedures** invoked during individual phases.
+The S.C.O.P.E. framework governs the **lifecycle process** (phase boundaries, checkpoints, decision gates, law documents). Specialized skills and MCP tools are **tactical procedures** invoked during individual phases—**each phase's loaded skills author the detailed tactical plan and execution steps inside that phase**.
 
 *Precedence Rule:* No skill or MCP prompt overrides root `AGENTS.md` or S.C.O.P.E. gates. When conflicts arise, follow `AGENTS.md` and log the rationale in `findings.md`.
 
@@ -65,10 +65,11 @@ These ship with the agent runtime and do not count toward the skill limit.
 ### 2e. Skill Count Rule
 Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count). Each chosen platform pack (Section 4) adds at most 1–2 skills, and a new skill must replace or clearly beat an existing one.
 
-### 2f. Missing-Skill Protocol — Never Improvise Alone
+### 2f. Missing-Skill & Phase-Entry Planning Protocol — Never Improvise Alone
 1. **Check local installation:** Look in your loaded `<skills>` list and local skill directories (`.agents/skills/`, `.claude/skills/`, `~/.gemini/config/skills/`, `~/.claude/skills/`).
 2. **Stop and ask before bypassing:** If a skill required for the active phase (especially `design-taste-frontend` or `frontend-design` plus `impeccable` in Phase 1 for UI projects) is missing, **do not invent the design or workflow yourself**. Present the exact `npx skills add` command from Tables 2b–2d (append `-g` for global install) and ask the user whether to install it or explicitly approve skipping it.
 3. **Read before designing:** Once installed (or already present), call `read_file` on its `SKILL.md` and follow its workflow before authoring `PRODUCT.md`, `DESIGN.md`, or implementation code.
+4. **Plan one phase at a time from its skills:** At the start of each phase (`1` through `5`), read that phase's required `SKILL.md` files first, then write that phase's detailed execution plan in `task_plan.md`. Complete the phase, record proof in `progress.md`, and stop at the phase boundary before planning the next phase.
 
 ---
 

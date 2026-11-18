@@ -7,7 +7,7 @@ description: Runs the S.C.O.P.E. framework (Specification, Connections, Organiza
 
 This skill provides the end-to-end engineering protocol. Short, always-on rules live in the project's root `AGENTS.md` (the Constitution). If missing, generate it during Phase 0 from `templates/AGENTS.template.md`.
 
-Always read `references/skills-and-safety.md` and `references/stack-matrix.md` during Phase 0 and Phase 1 (before drafting any plan, designing UI, or exiting plan mode). Read the other references when prompted by their phase:
+Always read `references/skills-and-safety.md` and `references/stack-matrix.md` during Phase 0 and Phase 1 (before drafting any plan, designing UI, or exiting plan mode). At the entry of **every** phase (`1`–`5`), call `read_file` on that phase's required skill `SKILL.md` files and reference files **before** writing that phase's detailed plan or exiting plan mode:
 - `references/stack-matrix.md`: The 12-layer stack, tier definitions (T0/T1/T2), and layer build standards.
 - `references/skills-and-safety.md`: Built-in commands, skill & MCP inventory, platform packs, skill count rule, strict vetting checklist, and permission posture.
 - `references/config-templates.md`: Settings, hooks, MCP configs, git secret scanning, and UI rule templates.
@@ -15,10 +15,10 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 - `references/recon.md`: Safe inspection of existing sites (authorization tiers, safety rules, cleanroom recreation).
 
 ## Operating Principles
-1. **Work Phase-by-Phase**: Declare your active phase and intended deliverables at the start of each turn.
+1. **Work & Plan Phase-by-Phase (Read Skills → Plan Phase → Execute → Stop)**: Never write a detailed implementation plan for all 5 phases upfront. At the start of each phase: (a) check which skills are required for that phase, ask to install any missing ones from `references/skills-and-safety.md`, and call `read_file` on their `SKILL.md` files first; (b) write an elaborate plan for **only** the active phase in `task_plan.md` using those loaded skills (in `/plan` mode, scope each plan handoff to a single phase); (c) execute and verify that phase; and (d) **stop at the phase boundary**, present proof in `progress.md`, and wait for user approval before planning the next phase.
 2. **Deterministic Over Probabilistic**: LLMs reason probabilistically; business logic, schemas, and tests must be deterministic.
 3. **Data-First**: Define schemas and contracts in `architecture/schemas.md` before writing executable code.
-4. **Never Skip Gates**: Gate 1 (Blueprint Approval) and Gate 2 (Production Readiness) require explicit user sign-off.
+4. **Never Skip Gates or Phase Checkpoints**: Gate 1 (Phase 1), Phase 2–4 Checkpoints, and Gate 2 (Phase 5) require stopping and obtaining explicit user confirmation before advancing.
 5. **No Hallucinated Business Logic**: Never invent domain requirements. Ask clarifying questions in groups.
 6. **Self-Annealing**: On failure, diagnose with root-cause debugging, patch, add a regression test, and update the SOP before moving forward. Three consecutive failures trigger the Three-Strike Breaker.
 
@@ -57,13 +57,13 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
    - *Core*: North Star goal, necessary integrations, source of truth, delivery payload, behavioral "Do Not" rules.
    - *Production*: User personas, roles/access control, compliance/sensitivity, scale expectations, budget, stack constraints.
    - *Design (UI)*: Target audience, aesthetic tone, reference products, anti-patterns.
-2. **Tier & Layer Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale). Complete the Layer Decision Table in `findings.md` using the template from `references/stack-matrix.md`.
+2. **Tier, Layer & Skill Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale). Complete the Layer Decision Table in `findings.md` using `references/stack-matrix.md`, and record which conditional skills and Platform Packs (`references/skills-and-safety.md`) Phases 2–5 will use.
 3. **Data-First Modeling**: In `architecture/schemas.md`, define input/output payload shapes, database entities/relations, roles/permissions matrix (for RLS), and API response/error contracts.
 4. **Visual Direction (UI — Skill-Driven, Never Solo)**: Never plan or invent a website's visual design, layout, or `DESIGN.md` on your own—even when the user provides colors, fonts, or reference images. First, locate and call `read_file` on the `SKILL.md` for `design-taste-frontend` (`taste-skill`, for websites, landing pages, portfolios, and product sites) or `frontend-design` (for app UIs/dashboards) **and** `impeccable`. If missing, stop and ask the user to install them via the commands in `references/skills-and-safety.md` (Section 2c). Plan the screen-by-screen layout, typography, token palette, and interaction rules strictly using the loaded skill's workflow (e.g., `taste-skill`'s business classification, `scripts/start.mjs`, `assets/layout/deal.mjs`, and House Rules), initialize `PRODUCT.md`, and merge all visual tokens into `DESIGN.md` as the single source of truth.
 5. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` covering critical assets, threat vectors, and mitigations.
 6. **Reconnaissance (Optional)**: If analyzing an existing reference site, consult `references/recon.md` and confirm the authorization class. Inspect layout and public, unauthenticated network flows using `/browser`. Never copy code, text, or assets verbatim.
-7. **Gate 1 Approval**: Present the complete specification in `task_plan.md`. Do not write code or exit Gate 1 until every item is satisfied and the user explicitly approves:
-   - [ ] Discovery, Tier (T0/T1/T2), and 12-Layer Decision Table completed in `findings.md`.
+7. **Gate 1 Approval (Macro Blueprint — Stop)**: Present the Macro Blueprint in `task_plan.md` (full Phase 1 spec + high-level placeholders for Phases 2–5 with candidate skills mapped per phase; do **not** lock detailed Phase 2–5 code steps yet). Do not write code or exit Gate 1 until every item is satisfied and the user explicitly approves:
+   - [ ] Discovery, Tier (T0/T1/T2), 12-Layer Decision Table, and planned skills/packs recorded in `findings.md`.
    - [ ] Data schemas, permissions matrix, and API contracts defined in `architecture/schemas.md`.
    - [ ] (UI projects) `design-taste-frontend` (`taste-skill`) or `frontend-design` **and** `impeccable` `SKILL.md` files were read via `read_file` and used to plan `PRODUCT.md`, `DESIGN.md`, and the layout in `task_plan.md` (or the user explicitly approved skipping installation).
 
@@ -71,20 +71,24 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 
 ## ⚡ Phase 2: C — Connections (Connectivity & Credentials)
 
-1. **Tooling & Frontmatter**: Confirm skills, hooks, and MCP servers load properly. Ensure `.agents/rules/*.md` files have valid `trigger:` frontmatter.
-2. **Secret Hygiene**: The agent must never read, print, or commit `.env` or plain-text secrets. Use environment variables exclusively. Keep keys out of committed workspace configs.
-3. **Handshake Verification**: Build and execute minimal test scripts to verify:
+1. **Skill-First Phase 2 Plan**: Read `references/config-templates.md` and (if in stack) `supabase` / `stripe-best-practices` `SKILL.md` via `read_file` for local CLI emulator/sandbox rules (ask to install if missing). Expand Phase 2 in `task_plan.md` into a detailed connectivity and handshake plan before running handshakes.
+2. **Tooling & Frontmatter**: Confirm skills, hooks, and MCP servers load properly. Ensure `.agents/rules/*.md` files have valid `trigger:` frontmatter.
+3. **Secret Hygiene**: The agent must never read, print, or commit `.env` or plain-text secrets. Use environment variables exclusively. Keep keys out of committed workspace configs.
+4. **Handshake Verification**: Build and execute minimal test scripts to verify:
    - Database read/write access
    - Auth provider connection
    - External APIs and webhooks
    - Remote git repository and CI pipeline
    - Error tracking and logging capture
-4. **Least Privilege**: Configure keys with minimum required scopes. Keep development, staging, and production keys separated. MCP keys live only in user global configuration.
-5. **Isolated Browser**: Run `/browser` in an isolated session or profile with no personal user data or credentials.
+5. **Least Privilege**: Configure keys with minimum required scopes. Keep development, staging, and production keys separated. MCP keys live only in user global configuration.
+6. **Isolated Browser**: Run `/browser` in an isolated session or profile with no personal user data or credentials.
+7. **Phase 2 Checkpoint — Stop**: Record handshake results in `progress.md`, stop, and obtain user confirmation before reading Phase 3 skills and planning Phase 3.
 
 ---
 
 ## ⚙️ Phase 3: O — Organization (The 3-Layer Build)
+
+1. **Skill-First Phase 3 Plan**: Before writing code, read `references/stack-matrix.md`, `references/caching-and-scaling.md`, and every active stack skill's `SKILL.md` (`supabase`, `stripe-best-practices`, chosen Layer 6/9/10 skills, `vercel-react-best-practices`, `design-taste-frontend`, `systematic-debugging`, `verification-before-completion`) via `read_file` (ask to install if missing). Use those skills' patterns to expand Phase 3 in `task_plan.md` into ordered Vertical Feature Slices (`<= 5` code files per slice).
 
 Follow the 3-Layer Architecture for every feature:
 - **Layer 1: Architecture (`architecture/`)**: Standard Operating Procedures (SOPs) in Markdown describing goals, inputs, logic, and error boundaries. Stack SOPs include `data.md`, `auth.md`, `security.md`, `rate-limiting.md`, `caching.md`, etc. *Rule: Update the SOP before modifying code.*
@@ -95,23 +99,24 @@ Follow the 3-Layer Architecture for every feature:
 For each vertical feature slice:
 1. **Scope Gate**: List all target files. If touching more than 5 code files, pause and split the slice.
 2. **Docs Update**: Update the relevant SOP and `architecture/schemas.md` if data shapes or logic change.
-3. **Implementation**: Consult context7 for current library/SDK documentation. Write clean, modular code with accompanying unit/integration tests.
+3. **Implementation**: Consult `context7` for current library/SDK documentation. Write clean, modular code with accompanying unit/integration tests.
 4. **Verification**: Execute typechecks, tests, and build commands. Capture terminal output as proof.
 5. **UI Check (if applicable)**: Verify viewports (mobile, tablet, desktop) and console logs via `/browser`.
 6. **Commit**: Append verification evidence to `progress.md` and create a small, conventional commit.
 
-*Reference: Consult `references/stack-matrix.md` and `references/caching-and-scaling.md` during implementation.*
+**Phase 3 Checkpoint — Stop**: Once all planned slices and tests are verified and logged in `progress.md`, stop and obtain user confirmation before reading Phase 4 skills and planning Phase 4.
 
 ---
 
 ## ✨ Phase 4: P — Polish (Refinement, UI & Quality)
 
-1. **Payload & Formatting**: Refine outward-facing output formats (emails, reports, notifications, UI copy).
-2. **Design Audit**: Read and apply `impeccable` `SKILL.md` (and run `design-taste-frontend`'s real-browser consistency and finish-gate checks when `taste-skill` is chosen) to steer and polish components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
-3. **Accessibility & UX**: Aesthetic steering does not prove accessibility—audit against `web-design-guidelines` `SKILL.md`. Verify real WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
-4. **State Completeness**: Ensure every view handles 5 essential states: Loading, Empty, Success, Partial Error, and Fatal Error.
-5. **Framework Performance**: For React/Next.js, apply `vercel-react-best-practices` `SKILL.md`. Sanitize bundles to ensure no environment secrets leak client-side.
-6. **User Review**: Demonstrate working flows via `/browser` or screenshots and receive review approval before proceeding to deployment.
+1. **Skill-First Phase 4 Plan**: Call `read_file` on `impeccable`, `design-taste-frontend` (`taste-skill`, if chosen), `web-design-guidelines`, and `vercel-react-best-practices` (React/Next) `SKILL.md` files (ask to install if missing). Expand Phase 4 in `task_plan.md` into a detailed audit and remediation checklist derived from those loaded skills before modifying components.
+2. **Payload & Formatting**: Refine outward-facing output formats (emails, reports, notifications, UI copy).
+3. **Design Audit**: Read and apply `impeccable` `SKILL.md` (and run `design-taste-frontend`'s real-browser consistency and finish-gate checks when `taste-skill` is chosen) to steer and polish components against `DESIGN.md`. Eliminate generic AI styling (avoid random neon gradients, repetitive 3-card layouts, or uniform rounded blobs).
+4. **Accessibility & UX**: Aesthetic steering does not prove accessibility—audit against `web-design-guidelines` `SKILL.md`. Verify real WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
+5. **State Completeness**: Ensure every view handles 5 essential states: Loading, Empty, Success, Partial Error, and Fatal Error.
+6. **Framework Performance**: For React/Next.js, apply `vercel-react-best-practices` `SKILL.md`. Sanitize bundles to ensure no environment secrets leak client-side.
+7. **Phase 4 Checkpoint & User Review — Stop**: Demonstrate working flows and audit passes via `/browser` or screenshots, log proof in `progress.md`, and stop for explicit user sign-off before reading Phase 5 skills and planning Phase 5.
 
 ---
 
@@ -131,13 +136,14 @@ Do not deploy until all items are validated and logged in `progress.md`, or expl
 - [ ] Documented rollback procedure verified.
 - [ ] Cost caps and budget alerts set (T1+).
 - [ ] Staging smoke test passed via `/browser`.
-- [ ] Deployment follows the Deploy Rule (Execution Step 1): `git status` is clean, `.gitignore` and platform ignore files exclude secrets, and staging/preview comes first.
+- [ ] Deployment follows the Deploy Rule (Execution Step 2): `git status` is clean, `.gitignore` and platform ignore files exclude secrets, and staging/preview comes first.
 
 ### Execution Steps
-1. **Deploy Rule**: Deploy only committed code, through Git (the platform's Git integration or CI) or the platform's own CLI with the user's approval. Before any CLI deploy: `git status` is clean, ignore files (`.gitignore` and the platform's ignore file) are verified to exclude secrets, and staging or preview comes first. Never use tools that upload a local folder or file contents as tool arguments (for example `deploy-to-vercel`, `cloud-run/deploy-local-folder`, or inline MCP file deploys). Connect infrastructure MCPs only for this phase in read-only mode, and disconnect immediately after.
-2. **CI/CD Enforcement**: Merges must require green automated checks on feature branches.
-3. **Resilience & Scaling**: Configure CDN caching headers, load-balancer health probes, and connection pooling (see `references/caching-and-scaling.md`).
-4. **Maintenance & Handoff**: Finalize `architecture/maintenance.md` with operational runbooks, rollback steps, secret rotation guides, and revisit triggers for Deferred layers. Run `/learn` to store project adjustments.
+1. **Skill-First Phase 5 Plan**: Call `read_file` on `references/caching-and-scaling.md`, `references/skills-and-safety.md` (Deploy Rule), and the chosen Layer 5/6 Platform Pack `SKILL.md` (ask to install if missing), and expand Phase 5 in `task_plan.md` with the platform-specific release, Gate 2 verification, and rollback plan before running Gate 2 or deploying.
+2. **Deploy Rule**: Deploy only committed code, through Git (the platform's Git integration or CI) or the platform's own CLI with the user's approval. Before any CLI deploy: `git status` is clean, ignore files (`.gitignore` and the platform's ignore file) are verified to exclude secrets, and staging or preview comes first. Never use tools that upload a local folder or file contents as tool arguments (for example `deploy-to-vercel`, `cloud-run/deploy-local-folder`, or inline MCP file deploys). Connect infrastructure MCPs only for this phase in read-only mode, and disconnect immediately after.
+3. **CI/CD Enforcement**: Merges must require green automated checks on feature branches.
+4. **Resilience & Scaling**: Configure CDN caching headers, load-balancer health probes, and connection pooling (see `references/caching-and-scaling.md`).
+5. **Maintenance & Handoff**: Finalize `architecture/maintenance.md` with operational runbooks, rollback steps, secret rotation guides, and revisit triggers for Deferred layers. Run `/learn` to store project adjustments.
 
 ---
 
