@@ -27,16 +27,25 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 ## Phase → Skill & Tool Map
 - **Skills (`name` without `/`)** are `SKILL.md` files in `<skills>`, `.agents/skills/<name>/SKILL.md`, `.claude/skills/<name>/SKILL.md`, `~/.gemini/config/skills/<name>/SKILL.md`, or `~/.claude/skills/<name>/SKILL.md`. Activate them by calling `read_file` on their `SKILL.md`. If a required skill is not installed, **stop** and ask the user to install it using the command in `references/skills-and-safety.md` (Section 2).
 - **Built-in Slash Commands (`/name` with `/`)** are runtime/UI commands (`/grill-me`, `/plan`, `/browser`, `/learn`, `/scope`, `/skills`, `/hooks`, `/mcp`).
-- Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count). Every item below is inventoried, with its install command and guardrails, in `references/skills-and-safety.md`.
+- Keep at most 10 core skills and about 14 skills in total (built-in slash commands and MCP servers do not count). Every item below is inventoried, with its install command and guardrails, in `references/skills-and-safety.md`.
 
 | Phase | Skills & Tools |
 |---|---|
 | **0. Init** | Inspect loaded `<skills>` & `<mcp_servers>` (or built-in `/skills`, `/hooks`, `/mcp`); read `references/skills-and-safety.md` |
 | **1. Specification** | `/grill-me` (discovery), `/plan`, read `design-taste-frontend` (`taste-skill`) or `frontend-design` + `impeccable` `SKILL.md` (UI projects), `/browser` (recon only) |
 | **2. Connections** | `context7` MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected; GitHub MCP (scoped) |
-| **3. Organization** | `context7` before library/SDK calls; read `supabase`, `stripe-best-practices` `SKILL.md` if in stack; read `systematic-debugging` on errors; read `verification-before-completion` on slice completion |
+| **3. Organization** | `context7` before library/SDK calls; read `supabase`, `stripe-best-practices` `SKILL.md` if in stack; `test-driven-development` (red → green → refactor; skip T0 throwaways), `systematic-debugging` on errors, `verification-before-completion` & `requesting-code-review` on slices; conditional `subagent-driven-development` (T2 or 3+ independent slices) |
 | **4. Polish** | Read `impeccable` (polish, critique, audit), `design-taste-frontend` (`taste-skill` browser/finish gate, if chosen), `web-design-guidelines`, and `vercel-react-best-practices` (React/Next) `SKILL.md`; `/browser` |
-| **5. Execution** | `/browser` staging smoke tests; chosen platform pack; read-only infrastructure & observability MCPs; `/learn` to record session learnings |
+| **5. Execution** | `/browser` staging smoke tests; `requesting-code-review` pre-Gate 2 check; chosen platform pack; read-only infrastructure & observability MCPs; `/learn` to record session learnings |
+
+### Skill-Skip Red Flags (STOP if you think this)
+| Excuse | Reality |
+|---|---|
+| "User already gave colors/spec, so I'll design it myself" | Never bypass `design-taste-frontend`/`frontend-design` + `impeccable`. Read `SKILL.md` first. |
+| "This task is simple / the skill is overkill" | Simple tasks drift fast. Check and read the phase's skills first. |
+| "I remember how this skill works" | Skills evolve. Always call `read_file` on the current `SKILL.md`. |
+| "I'll explore or write one quick file first" | Skills govern how you explore and plan. Check skills *before* acting. |
+| "I'll plan all 5 phases now to save turns" | Upfront plans make later skills decorative. Plan one phase at a time. |
 
 ---
 
@@ -57,7 +66,7 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
    - *Core*: North Star goal, necessary integrations, source of truth, delivery payload, behavioral "Do Not" rules.
    - *Production*: User personas, roles/access control, compliance/sensitivity, scale expectations, budget, stack constraints.
    - *Design (UI)*: Target audience, aesthetic tone, reference products, anti-patterns.
-2. **Tier, Layer & Skill Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale). Complete the Layer Decision Table in `findings.md` using `references/stack-matrix.md`, and record which conditional skills and Platform Packs (`references/skills-and-safety.md`) Phases 2–5 will use.
+2. **Tier, Layer & Skill Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale) by presenting 2–3 concrete tier/stack options with tradeoffs for the user to pick. Complete the Layer Decision Table in `findings.md` using `references/stack-matrix.md`, and record which conditional skills and Platform Packs (`references/skills-and-safety.md`) Phases 2–5 will use.
 3. **Data-First Modeling**: In `architecture/schemas.md`, define input/output payload shapes, database entities/relations, roles/permissions matrix (for RLS), and API response/error contracts.
 4. **Visual Direction (UI — Skill-Driven, Never Solo)**: Never plan or invent a website's visual design, layout, or `DESIGN.md` on your own—even when the user provides colors, fonts, or reference images. First, locate and call `read_file` on the `SKILL.md` for `design-taste-frontend` (`taste-skill`, for websites, landing pages, portfolios, and product sites) or `frontend-design` (for app UIs/dashboards) **and** `impeccable`. If missing, stop and ask the user to install them via the commands in `references/skills-and-safety.md` (Section 2c). Plan the screen-by-screen layout, typography, token palette, and interaction rules strictly using the loaded skill's workflow (e.g., `taste-skill`'s business classification, `scripts/start.mjs`, `assets/layout/deal.mjs`, and House Rules), initialize `PRODUCT.md`, and merge all visual tokens into `DESIGN.md` as the single source of truth.
 5. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` covering critical assets, threat vectors, and mitigations.
@@ -88,7 +97,7 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 
 ## ⚙️ Phase 3: O — Organization (The 3-Layer Build)
 
-1. **Skill-First Phase 3 Plan**: Before writing code, read `references/stack-matrix.md`, `references/caching-and-scaling.md`, and every active stack skill's `SKILL.md` (`supabase`, `stripe-best-practices`, chosen Layer 6/9/10 skills, `vercel-react-best-practices`, `design-taste-frontend`, `systematic-debugging`, `verification-before-completion`) via `read_file` (ask to install if missing). Use those skills' patterns to expand Phase 3 in `task_plan.md` into ordered Vertical Feature Slices (`<= 5` code files per slice).
+1. **Skill-First Phase 3 Plan**: Before writing code, read `references/stack-matrix.md`, `references/caching-and-scaling.md`, and every active stack skill's `SKILL.md` (`test-driven-development`, `requesting-code-review`, `verification-before-completion`, `systematic-debugging`, `supabase`, `stripe-best-practices`, chosen Layer 6/9/10 skills, `vercel-react-best-practices`, `design-taste-frontend`, plus conditional `subagent-driven-development` when T2 or 3+ independent slices apply) via `read_file` (ask to install if missing). Expand Phase 3 in `task_plan.md` by mapping target files and responsibilities first, then breaking work into bite-sized Vertical Feature Slices (`<= 5` code files per slice) with exact interfaces, test cases, and one checkable action per step (`write failing test → verify fail → implement → verify pass → review → commit`).
 
 Follow the 3-Layer Architecture for every feature:
 - **Layer 1: Architecture (`architecture/`)**: Standard Operating Procedures (SOPs) in Markdown describing goals, inputs, logic, and error boundaries. Stack SOPs include `data.md`, `auth.md`, `security.md`, `rate-limiting.md`, `caching.md`, etc. *Rule: Update the SOP before modifying code.*
@@ -99,8 +108,8 @@ Follow the 3-Layer Architecture for every feature:
 For each vertical feature slice:
 1. **Scope Gate**: List all target files. If touching more than 5 code files, pause and split the slice.
 2. **Docs Update**: Update the relevant SOP and `architecture/schemas.md` if data shapes or logic change.
-3. **Implementation**: Consult `context7` for current library/SDK documentation. Write clean, modular code with accompanying unit/integration tests.
-4. **Verification**: Execute typechecks, tests, and build commands. Capture terminal output as proof.
+3. **Implementation**: Follow `test-driven-development` (write failing test first, watch it fail, write minimal code to pass; skip only for T0 throwaway prototypes) and consult `context7` for current library/SDK documentation.
+4. **Verification & Review**: Execute typechecks, tests, and build commands with fresh `verification-before-completion` proof, and dispatch a fresh code review via `requesting-code-review` at slice completion / Phase 3 checkpoint.
 5. **UI Check (if applicable)**: Verify viewports (mobile, tablet, desktop) and console logs via `/browser`.
 6. **Commit**: Append verification evidence to `progress.md` and create a small, conventional commit.
 
@@ -136,6 +145,7 @@ Do not deploy until all items are validated and logged in `progress.md`, or expl
 - [ ] Documented rollback procedure verified.
 - [ ] Cost caps and budget alerts set (T1+).
 - [ ] Staging smoke test passed via `/browser`.
+- [ ] Final code review completed via `requesting-code-review` (T1+).
 - [ ] Deployment follows the Deploy Rule (Execution Step 2): `git status` is clean, `.gitignore` and platform ignore files exclude secrets, and staging/preview comes first.
 
 ### Execution Steps

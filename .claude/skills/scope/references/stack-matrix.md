@@ -105,4 +105,4 @@ Summary only. Install guardrails, conditions, and permission posture for every e
 | **10 Caching & CDN** | `redis-best-practices` (if Redis); `references/caching-and-scaling.md` (incl. Next.js caching) |
 | **11 Load Balancing & Scaling** | `references/caching-and-scaling.md` (probes, pooling, autoscaling) |
 | **12 Observability** | `systematic-debugging` for root-cause diagnosis; Sentry/Datadog for prod |
-| **All Layers** | `verification-before-completion` before marking any slice complete |
+| **All Layers** | `test-driven-development` (T1+), `verification-before-completion`, `requesting-code-review`; `subagent-driven-development` (T2 / 3+ independent slices) |

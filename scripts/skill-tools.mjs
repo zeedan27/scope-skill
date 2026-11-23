@@ -15,7 +15,7 @@ const TARGET_DIRS = [
 ];
 
 const SKILL_FOLDER_NAME = "scope";
-const SKILL_COUNT_PHRASE = "at most 8 core skills and about 12 skills in total";
+const SKILL_COUNT_PHRASE = "at most 10 core skills and about 14 skills in total";
 const SKILL_EXCLUSION_PHRASE = "built-in slash commands and mcp servers do not count";
 
 function walkFiles(dir, baseDir = dir) {
@@ -141,6 +141,9 @@ function extractReferencedTools(filesContentMap) {
           "stripe-best-practices",
           "verification-before-completion",
           "systematic-debugging",
+          "test-driven-development",
+          "requesting-code-review",
+          "subagent-driven-development",
           "frontend-design",
           "design-taste-frontend",
           "taste-skill",
@@ -488,6 +491,9 @@ function checkAll() {
     "stripe-best-practices",
     "systematic-debugging",
     "verification-before-completion",
+    "test-driven-development",
+    "requesting-code-review",
+    "subagent-driven-development",
   ];
   for (const rel of ["SKILL.md", "references/stack-matrix.md", "templates/AGENTS.template.md"]) {
     const txt = filesContent[rel] || "";
@@ -537,6 +543,7 @@ function checkAll() {
     "Skill-First Phase 3 Plan",
     "Skill-First Phase 4 Plan",
     "Skill-First Phase 5 Plan",
+    "Skill-Skip Red Flags",
   ]) {
     if (!skillMd.includes(requiredMarker)) {
       fail(`SKILL.md: missing '${requiredMarker}' rule`);

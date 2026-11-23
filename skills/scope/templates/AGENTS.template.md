@@ -70,6 +70,6 @@ Never maintain duplicate copies of any fact across files.
 1. **Scope Gate:** List all target files before executing non-trivial edits. If more than 5 code files (`src/`, `tools/`, `migrations/`) are affected, stop and split the slice.
 2. **Dependency Lock:** Stick strictly to declared stack dependencies. Never install unverified or low-reputation registry packages.
 3. **Three-Strike Breaker:** If 3 consecutive remediation attempts fail, stop. Present: (a) rollback to the last verified commit, (b) summary of confirmed facts vs. unknowns, and (c) an alternative hypothesis.
-4. **Targeted Skills:** Activate skills by reading their `SKILL.md` via `read_file` (e.g. `design-taste-frontend`, `impeccable`, `systematic-debugging`); use `/` only for built-in slash commands (e.g. `/grill-me`, `/plan`, `/browser`). Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count).
+4. **Targeted Skills:** Activate skills by reading their `SKILL.md` via `read_file` (e.g. `design-taste-frontend`, `impeccable`, `systematic-debugging`); use `/` only for built-in slash commands (e.g. `/grill-me`, `/plan`, `/browser`). Keep at most 10 core skills and about 14 skills in total (built-in slash commands and MCP servers do not count).
 5. **Right-Sizing:** Scale architectural rigor to the declared tier. Record deferrals with explicit revisit triggers.
 6. **Fail Loudly:** Never swallow errors. Log failures with actionable context, redacting all sensitive data.

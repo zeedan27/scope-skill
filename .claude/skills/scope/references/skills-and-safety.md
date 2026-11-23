@@ -45,6 +45,8 @@ These ship with the agent runtime and do not count toward the skill limit.
 | `scope` | The overarching lifecycle and gating protocol | All | `npx skills add zeedan27/scope-skill --skill scope` |
 | `verification-before-completion` | Require fresh test proof before claiming completion | 3, all slices | `npx skills add obra/superpowers --skill verification-before-completion` |
 | `systematic-debugging` | Multi-phase root-cause investigation; powers self-annealing | 3, 5, on errors | `npx skills add obra/superpowers --skill systematic-debugging` |
+| `test-driven-development` | Write failing test first (red → green → refactor) before production code (skip for T0 throwaways) | 3, all slices | `npx skills add obra/superpowers --skill test-driven-development` |
+| `requesting-code-review` | Dispatch a fresh-context code reviewer against requirements and plan | 3, 5 (pre-merge / Gate 2) | `npx skills add obra/superpowers --skill requesting-code-review` |
 
 ### 2c. Frontend & UI Skills (Conditional — UI projects only)
 | Skill | Condition | Job | Phase | Source / Install Command |
@@ -61,9 +63,10 @@ These ship with the agent runtime and do not count toward the skill limit.
 | `supabase` | Conditional: Supabase chosen (Layers 3, 4, 8) | Schema, auth, RLS, and local CLI emulation patterns | 3 | `npx skills add supabase/agent-skills --skill supabase` |
 | `stripe-best-practices` | Conditional: payments in scope (Layers 2, 8) | Checkout, webhook verification, and sandbox testing | 3 | `npx skills add stripe/ai --skill stripe-best-practices` |
 | `designlang` | Optional: during recon after Section 6 vetting | Local design-token extractor outputting to `.tmp/recon/` (`references/recon.md`) | 1 | Local CLI extractor (`references/recon.md`; vet per Section 6) |
+| `subagent-driven-development` | Conditional: T2 scale or Phase 3 with 3+ independent vertical slices | Execute independent planned slices via isolated subagents with review gates | 3 | `npx skills add obra/superpowers --skill subagent-driven-development` |
 
 ### 2e. Skill Count Rule
-Keep at most 8 core skills and about 12 skills in total (built-in slash commands and MCP servers do not count). Each chosen platform pack (Section 4) adds at most 1–2 skills, and a new skill must replace or clearly beat an existing one.
+Keep at most 10 core skills and about 14 skills in total (built-in slash commands and MCP servers do not count). Each chosen platform pack (Section 4) adds at most 1–2 skills, and a new skill must replace or clearly beat an existing one. Install skills individually with `--skill <name>`—never install full multi-skill bundles.
 
 ### 2f. Missing-Skill & Phase-Entry Planning Protocol — Never Improvise Alone
 1. **Check local installation:** Look in your loaded `<skills>` list and local skill directories (`.agents/skills/`, `.claude/skills/`, `~/.gemini/config/skills/`, `~/.claude/skills/`).
@@ -120,7 +123,7 @@ Install only the specific skill required for your chosen stack; avoid mass insta
 
 ## 5. Prohibited & High-Risk Tools
 - **Upload-Based Deployment Tools** (e.g., `deploy-to-vercel`, `cloud-run/deploy-local-folder`, inline MCP file deploys): Violate the Deploy Rule (Section 1), bypass source control, expose untracked files, and fail on binary assets.
-- **Unvetted Catalog Mega-Bundles**: Installing entire vendor catalogs or multi-hundred-skill bundles exceeds the skill limit and degrades model accuracy.
+- **Unvetted Catalog Mega-Bundles**: Install skills individually with `--skill <name>`. Installing entire vendor catalogs or full multi-skill bundles (such as installing all of `obra/superpowers` at once) exceeds the skill limit and degrades model accuracy.
 - **Stealth Browsers & Anti-Bot Bypasses**: Never use tools designed to crack CAPTCHAs, bypass paywalls or logins, or spoof fingerprints.
 - **Write-Enabled Cluster Tools in Production**: Cloud admin or cluster MCPs with live mutating rights must never be connected during standard development.
 - **Deprecated or Vulnerable Tools**: Avoid abandoned MCPs, versions with known security advisories, or tools that execute unbounded scans (`KEYS *`).
