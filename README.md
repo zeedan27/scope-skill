@@ -18,6 +18,8 @@ The **S.C.O.P.E. Framework** turns probabilistic LLMs into reliable, determinist
   └─────────────────┘     └─────────────────┘     └─────────────────┘     └──────────────┘     └─────────────────┘
            │                                                                                             │
         Gate 1: Blueprint Approval                                                                   Gate 2: Production Gate
+           ▲                                                                                             │
+           └─────── Cycle N+1: Track A Delta Feature · Track B Fast-Path Anneal · Track C Refinement ────┘
 ```
 
 ### The 5 Phases:
@@ -26,6 +28,12 @@ The **S.C.O.P.E. Framework** turns probabilistic LLMs into reliable, determinist
 3. **Organization** *(formerly Architect)*: 3-layer engineering build (Architecture SOPs → Navigation → Deterministic Tools). Vertical feature slices with mandatory test proof.
 4. **Polish** *(formerly Stylize)*: Payload formatting, UI accessibility audit (WCAG 2.1 AA), state completeness (Loading, Empty, Error), and zero leaked secrets.
 5. **Execution** *(formerly Trigger)*: Automated Gate 2 production readiness checklist, Git-driven deployment, CDN/cache optimization, and operational runbooks.
+
+### Post-Launch Continuation (`Cycle N+1`):
+Once v1 ships (`AGENTS.md` + `architecture/schemas.md` exist), `/scope` skips Phase 0, checks `Deferred` revisit triggers in `findings.md`, archives completed `task_plan.md` / verbose `progress.md` logs to `architecture/archive/`, and routes ongoing work into one of three tracks:
+- **Track A — Delta S.C.O.P.E.** *(New features, integrations, or layer promotions)*: Delta 1A → Delta 1B *(extending within existing `DESIGN.md`)* → Gate 1 → Phase 2 *(only if adding external services/secrets)* → Phase 3 → 4 → 5.
+- **Track B — Fast-Path Anneal** *(Bugfixes & missed edge cases)*: `systematic-debugging` → SOP update → TDD regression slice (`test-driven-development`) → Phase 5 Deploy Rule *(escalates to Track A if schemas, roles/RLS, or product rules change)*.
+- **Track C — Refinement Loop** *(UI, UX, copy, a11y, perf, or redesign)*: Look-preserving polish enters directly at Phase 4 → 5 against `DESIGN.md`; explicit full redesigns enter at Subphase 1B.
 
 ---
 
@@ -103,9 +111,11 @@ Simply type:
 ```text
 /scope
 ```
-or initialize a new project with:
+or initialize a new project or post-launch cycle with:
 ```text
 /scope initialize this project as a T1 SaaS web application
+/scope add team billing to our shipped app
+/scope fix the checkout webhook retry bug
 ```
 
 ### Triggering via Natural Language
@@ -122,7 +132,7 @@ The `scope` skill uses a token-efficient architecture designed for progressive d
 
 ```plaintext
 skills/scope/
-├── SKILL.md                          # Main protocol (< 200 lines, token-optimized)
+├── SKILL.md                          # Main protocol (< 250 lines, token-optimized)
 ├── templates/
 │   └── AGENTS.template.md            # The always-on project constitution (AGENTS.md)
 └── references/

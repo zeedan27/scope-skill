@@ -32,7 +32,7 @@ These ship with the agent runtime and do not count toward the skill limit.
 
 | Command | Job | Phase |
 |---|---|---|
-| `/scope` | Load the S.C.O.P.E. protocol and initialize a project or feature | All |
+| `/scope` | Load the S.C.O.P.E. protocol for greenfield init or post-launch continuation cycles | All |
 | `/skills`, `/hooks`, `/mcp` | Verify loaded skills, hooks, and MCP servers | 0, 2 |
 | `/grill-me` | Conduct structured functional & system discovery interviews | 1A |
 | `/plan` | Produce a step-by-step plan before execution | 1A, 1B (and per phase) |
@@ -44,8 +44,8 @@ These ship with the agent runtime and do not count toward the skill limit.
 |---|---|---|---|
 | `scope` | The overarching lifecycle and gating protocol | All | `npx skills add zeedan27/scope-skill --skill scope` |
 | `verification-before-completion` | Require fresh test proof before claiming completion | 3, all slices | `npx skills add obra/superpowers --skill verification-before-completion` |
-| `systematic-debugging` | Multi-phase root-cause investigation; powers self-annealing | 3, 5, on errors | `npx skills add obra/superpowers --skill systematic-debugging` |
-| `test-driven-development` | Write failing test first (red → green → refactor) before production code (skip for T0 throwaways) | 3, all slices | `npx skills add obra/superpowers --skill test-driven-development` |
+| `systematic-debugging` | Multi-phase root-cause investigation; powers self-annealing and Track B bugfixes | 3, 5, Track B (on errors) | `npx skills add obra/superpowers --skill systematic-debugging` |
+| `test-driven-development` | Write failing test first (red → green → refactor) before production code (skip for T0 throwaways) | 3, Track B, all slices | `npx skills add obra/superpowers --skill test-driven-development` |
 | `requesting-code-review` | Dispatch a fresh-context code reviewer against requirements and plan | 3, 5 (pre-merge / Gate 2) | `npx skills add obra/superpowers --skill requesting-code-review` |
 
 ### 2c. Frontend & UI Skills (Conditional — UI projects only)
@@ -53,7 +53,7 @@ These ship with the agent runtime and do not count toward the skill limit.
 |---|---|---|---|---|
 | `design-taste-frontend` (`taste-skill`) | UI projects (pick one: `design-taste-frontend` or `frontend-design`) | Anti-slop art direction, dealt palette/type/hero tokens (merge into `DESIGN.md`), real-browser layout/perf checker, and finish gate for websites & landing pages | 1B, 3, 4 | `npx skills add Leonxlnx/taste-skill --skill design-taste-frontend` |
 | `frontend-design` | UI projects (pick one: `frontend-design` or `design-taste-frontend`) | One-time aesthetic direction for app UIs/dashboards: palette, type, wireframes (merge into `DESIGN.md`) | 1B | `npx skills add anthropics/skills --skill frontend-design` |
-| `impeccable` | UI projects | `PRODUCT.md`/`DESIGN.md` setup, steering, polish, critique, anti-slop audit | 1B, 4 | `npx skills add pbakaus/impeccable --skill impeccable` |
+| `impeccable` | UI projects | `PRODUCT.md`/`DESIGN.md` setup, delta feature UI extension (preserving `DESIGN.md`), steering, polish, critique, anti-slop audit | 1B, 4, Track C | `npx skills add pbakaus/impeccable --skill impeccable` |
 | `web-design-guidelines` | UI projects | Accessibility (WCAG 2.1 AA), semantic markup, and UX audits | 4 | `npx skills add vercel-labs/agent-skills --skill web-design-guidelines` |
 | `vercel-react-best-practices` | React/Next.js UI projects | React/Next.js performance and hydration rules | 3, 4 | `npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices` |
 

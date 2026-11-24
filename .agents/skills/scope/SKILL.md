@@ -1,6 +1,6 @@
 ---
 name: scope
-description: Runs the S.C.O.P.E. framework (Specification, Connections, Organization, Polish, Execution) to build deterministic, production-grade web apps, full-stack systems, and automations through gated phases. Use at the start of any new project or vibecoding session, when transitioning between phases, when choosing a tech stack across the 12 infrastructure layers, when vetting skills/MCP tools, and before any production deployment.
+description: Runs the S.C.O.P.E. framework (Specification, Connections, Organization, Polish, Execution) to build and evolve deterministic, production-grade web apps, full-stack systems, and automations through gated phases and post-launch delta cycles. Use at the start of any new project or vibecoding session, when adding features, fixing bugs, or refining UI/performance on an existing S.C.O.P.E. repo, when transitioning between phases, when choosing a tech stack across the 12 infrastructure layers, when vetting skills/MCP tools, and before any production deployment.
 ---
 
 # S.C.O.P.E. Framework (System Pilot)
@@ -15,7 +15,7 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 - `references/recon.md`: Safe inspection of existing sites (authorization tiers, safety rules, cleanroom recreation).
 
 ## Operating Principles
-1. **Work & Plan Phase-by-Phase (Read Skills → Plan Phase → Execute → Stop)**: Never write a detailed implementation plan for all 5 phases upfront. Phase 1 executes sequentially as **Subphase 1A** (functional, stack, and schema spec + confirmation) followed—for UI projects—by **Subphase 1B** (skill-driven UI/design spec), culminating in Gate 1. At the start of each phase or subphase: (a) check required skills, ask to install missing ones from `references/skills-and-safety.md`, and call `read_file` on their `SKILL.md` files first; (b) write an elaborate plan for **only** the active step in `task_plan.md` using those loaded skills (in `/plan` mode, scope each plan handoff to a single phase or `1A`/`1B` subphase); (c) execute and verify that step; and (d) **stop at the checkpoint/boundary**, present proof in `progress.md`, and wait for user approval before advancing.
+1. **Work & Plan Phase-by-Phase (Read Skills → Plan Phase → Execute → Stop)**: Never write a detailed implementation plan for all 5 phases upfront. Greenfield projects run Phases `0 → 5`, while already-initialized S.C.O.P.E. repos enter via **Post-Launch Continuation (`Cycle N+1`)** tracks rather than repeating Phase 0. Phase 1 executes sequentially as **Subphase 1A** (functional, stack, and schema spec + confirmation) followed—for UI projects—by **Subphase 1B** (skill-driven UI/design spec), culminating in Gate 1. At the start of each phase or subphase: (a) check required skills, ask to install missing ones from `references/skills-and-safety.md`, and call `read_file` on their `SKILL.md` files first; (b) write an elaborate plan for **only** the active step in `task_plan.md` using those loaded skills (in `/plan` mode, scope each plan handoff to a single phase or `1A`/`1B` subphase); (c) execute and verify that step; and (d) **stop at the checkpoint/boundary**, present proof in `progress.md`, and wait for user approval before advancing.
 2. **Deterministic Over Probabilistic**: LLMs reason probabilistically; business logic, schemas, and tests must be deterministic.
 3. **Data-First**: Define schemas and contracts in `architecture/schemas.md` before writing executable code.
 4. **Never Skip Gates or Phase Checkpoints**: Gate 1 (Phase 1), Phase 2–4 Checkpoints, and Gate 2 (Phase 5) require stopping and obtaining explicit user confirmation before advancing.
@@ -48,10 +48,13 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 | "I remember how this skill works" | Skills evolve. Always call `read_file` on the current `SKILL.md`. |
 | "I'll explore or write one quick file first" | Skills govern how you explore and plan. Check skills *before* acting. |
 | "I'll plan all 5 phases now to save turns" | Upfront plans make later skills decorative. Plan one phase at a time. |
+| "v1 shipped, so I'll patch bugs or add features ad-hoc without `/scope`" | Post-launch work routes through Continuation Tracks (Delta S.C.O.P.E., Fast-Path Anneal, or Refinement Loop) to protect `DESIGN.md`, `schemas.md`, and Gate 2. |
 
 ---
 
 ## 🟢 Phase 0: Initialization (Mandatory Setup)
+
+*Greenfield projects only — if `AGENTS.md` and `architecture/schemas.md` already exist on an initialized repo, skip Phase 0 and jump directly to **🔄 Post-Launch Continuation (`Cycle N+1`)**.*
 
 1. **Project Memory**: Create `task_plan.md` (phases, checklists), `findings.md` (research, constraints, Layer Decision Table), and `progress.md` (action log, test evidence).
 2. **Law Documents**: Initialize `architecture/schemas.md`, `architecture/decisions.md` (ADR log), and `architecture/maintenance.md`.
@@ -171,15 +174,35 @@ Do not deploy until all items are validated and logged in `progress.md`, or expl
 4. Root `AGENTS.md`, SOPs, and `architecture/maintenance.md` accurately mirror production reality.
 5. Clean verification outputs are documented, and the user has signed off.
 
+---
+
+## 🔄 Post-Launch Continuation (Cycle N+1 — Evolution, Fixes & Polish)
+
+Use this path whenever `AGENTS.md` and `architecture/schemas.md` already exist. Never restart Phase 0 or re-deal an existing `DESIGN.md` unless explicitly asked for a visual redesign.
+
+### 1. Context Sync & Cycle Rollover (Mandatory Entry)
+1. **Sync State**: Read `AGENTS.md`, `findings.md`, `architecture/schemas.md`, `PRODUCT.md`/`DESIGN.md` (if UI), `task_plan.md`, `progress.md`, and `git log -5`.
+2. **Check Revisit Triggers**: Review every `Deferred` layer in `findings.md`; promote any triggered layer into the new cycle's scope.
+3. **Archive Completed Cycles**: When starting a new cycle after Phase 5, move the finished `task_plan.md` checklist and verbose prior-cycle logs from `progress.md` into `architecture/archive/cycle-<NN>.md`, keep a concise milestone summary in `progress.md`, and reset `task_plan.md` and `AGENTS.md` (`Current Cycle & Phase`) for `Cycle <N+1>`. Evergreen law docs (`AGENTS.md`, `findings.md`, `architecture/*`, `PRODUCT.md`, `DESIGN.md`) are updated in place—never duplicated.
+
+### 2. Continuation Track Router
+| Post-Launch Need | Track | Path Through S.C.O.P.E. |
+|---|---|---|
+| **New feature, integration, or layer promotion** | **Track A: Delta S.C.O.P.E.** | **Delta 1A** (scoped `/grill-me` on delta only; update `findings.md` & `architecture/schemas.md`; confirm **Phase 1A Checkpoint**) → **Delta 1B** *(UI only: read `impeccable` + `design-taste-frontend`/`frontend-design` `SKILL.md`; extend screens strictly within existing `DESIGN.md` tokens & voice—never re-deal palette/type)* → **Gate 1 Approval** → **Phase 2** *only if adding a new external service, webhook, MCP, or secret* (else skip) → **Phase 3 → Phase 4** (touched/new views) **→ Phase 5**. |
+| **Bugfix, regression, or missed edge case** | **Track B: Fast-Path Anneal** | If the fix requires changing DB schemas, roles/RLS, or product rules, **stop, ask the user, and escalate to Track A**. Otherwise skip Phases 1–2: read `systematic-debugging` `SKILL.md` for root cause → update the relevant SOP in `architecture/` for the missed invariant → **Phase 3** vertical slice (`test-driven-development`: write failing regression test first → minimal fix → `verification-before-completion` + `requesting-code-review`) → `/browser` verification if UI touched → **Phase 5** regression suite & Deploy Rule. |
+| **UI, UX, copy, a11y, perf, or visual redesign** | **Track C: Refinement Loop** | *Preserve look (default):* enter at **Phase 4** (read `impeccable`, `web-design-guidelines`, `vercel-react-best-practices`, or `design-taste-frontend` `SKILL.md`; plan audit checklist in `task_plan.md`; apply against incumbent `DESIGN.md`; stop at **Phase 4 Checkpoint**) → **Phase 5**. *Full visual redesign (explicit user request only):* enter at **Subphase 1B** (replace `DESIGN.md` world via loaded UI skills + **Gate 1 Approval**) → **Phase 3/4 → Phase 5**. |
+
+---
+
 ## 📂 Target Project File Structure
 ```plaintext
 ├── AGENTS.md              # Project Constitution (concise, always-on)
-├── task_plan.md           # Phases, goals, checklists, task state
+├── task_plan.md           # Active cycle phases, goals, checklists, task state
 ├── findings.md            # Research notes, Layer Decision Table, threat model
 ├── progress.md            # Activity log, test runs, verification evidence
 ├── PRODUCT.md / DESIGN.md # Product brief and visual tokens (single source of truth)
 ├── .env / .env.example    # Local secrets (ignored) / Template names (committed)
-├── architecture/          # SOPs (data.md, auth.md, etc.) + schemas.md, decisions.md, maintenance.md
+├── architecture/          # SOPs (data.md, auth.md, etc.), schemas.md, decisions.md, maintenance.md, archive/
 ├── src/                   # Core application source code
 ├── tools/                 # Operational and automation scripts
 ├── tests/                 # Unit, integration, and E2E test suites

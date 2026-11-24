@@ -547,6 +547,10 @@ function checkAll() {
     "Skill-First Phase 4 Plan",
     "Skill-First Phase 5 Plan",
     "Skill-Skip Red Flags",
+    "Post-Launch Continuation",
+    "Track A: Delta S.C.O.P.E.",
+    "Track B: Fast-Path Anneal",
+    "Track C: Refinement Loop",
   ]) {
     if (!skillMd.includes(requiredMarker)) {
       fail(`SKILL.md: missing '${requiredMarker}' rule`);
