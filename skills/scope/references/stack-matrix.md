@@ -54,7 +54,7 @@ Every production-grade project evaluates all 12 layers. Each layer must be expli
 ---
 
 ## 3. Layer Decision Table Template
-Copy this table into `findings.md` during Phase 1 (Specification):
+Copy this table into `findings.md` during Subphase 1A (Specification):
 
 ```markdown
 | Layer | Status (Required / Lite / Deferred) | Selected Tech | Rationale | Revisit Trigger |

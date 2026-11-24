@@ -7,7 +7,7 @@ description: Runs the S.C.O.P.E. framework (Specification, Connections, Organiza
 
 This skill provides the end-to-end engineering protocol. Short, always-on rules live in the project's root `AGENTS.md` (the Constitution). If missing, generate it during Phase 0 from `templates/AGENTS.template.md`.
 
-Always read `references/skills-and-safety.md` and `references/stack-matrix.md` during Phase 0 and Phase 1 (before drafting any plan, designing UI, or exiting plan mode). At the entry of **every** phase (`1`–`5`), call `read_file` on that phase's required skill `SKILL.md` files and reference files **before** writing that phase's detailed plan or exiting plan mode:
+Always read `references/skills-and-safety.md` and `references/stack-matrix.md` during Phase 0 and Subphase 1A (before drafting any plan or exiting plan mode). At the entry of **every** phase and subphase (`1A`, `1B`, `2`–`5`), call `read_file` on that step's required skill `SKILL.md` files and reference files **before** writing its detailed plan, designing UI, or exiting plan mode:
 - `references/stack-matrix.md`: The 12-layer stack, tier definitions (T0/T1/T2), and layer build standards.
 - `references/skills-and-safety.md`: Built-in commands, skill & MCP inventory, platform packs, skill count rule, strict vetting checklist, and permission posture.
 - `references/config-templates.md`: Settings, hooks, MCP configs, git secret scanning, and UI rule templates.
@@ -15,7 +15,7 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 - `references/recon.md`: Safe inspection of existing sites (authorization tiers, safety rules, cleanroom recreation).
 
 ## Operating Principles
-1. **Work & Plan Phase-by-Phase (Read Skills → Plan Phase → Execute → Stop)**: Never write a detailed implementation plan for all 5 phases upfront. At the start of each phase: (a) check which skills are required for that phase, ask to install any missing ones from `references/skills-and-safety.md`, and call `read_file` on their `SKILL.md` files first; (b) write an elaborate plan for **only** the active phase in `task_plan.md` using those loaded skills (in `/plan` mode, scope each plan handoff to a single phase); (c) execute and verify that phase; and (d) **stop at the phase boundary**, present proof in `progress.md`, and wait for user approval before planning the next phase.
+1. **Work & Plan Phase-by-Phase (Read Skills → Plan Phase → Execute → Stop)**: Never write a detailed implementation plan for all 5 phases upfront. Phase 1 executes sequentially as **Subphase 1A** (functional, stack, and schema spec + confirmation) followed—for UI projects—by **Subphase 1B** (skill-driven UI/design spec), culminating in Gate 1. At the start of each phase or subphase: (a) check required skills, ask to install missing ones from `references/skills-and-safety.md`, and call `read_file` on their `SKILL.md` files first; (b) write an elaborate plan for **only** the active step in `task_plan.md` using those loaded skills (in `/plan` mode, scope each plan handoff to a single phase or `1A`/`1B` subphase); (c) execute and verify that step; and (d) **stop at the checkpoint/boundary**, present proof in `progress.md`, and wait for user approval before advancing.
 2. **Deterministic Over Probabilistic**: LLMs reason probabilistically; business logic, schemas, and tests must be deterministic.
 3. **Data-First**: Define schemas and contracts in `architecture/schemas.md` before writing executable code.
 4. **Never Skip Gates or Phase Checkpoints**: Gate 1 (Phase 1), Phase 2–4 Checkpoints, and Gate 2 (Phase 5) require stopping and obtaining explicit user confirmation before advancing.
@@ -32,7 +32,8 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 | Phase | Skills & Tools |
 |---|---|
 | **0. Init** | Inspect loaded `<skills>` & `<mcp_servers>` (or built-in `/skills`, `/hooks`, `/mcp`); read `references/skills-and-safety.md` |
-| **1. Specification** | `/grill-me` (discovery), `/plan`, read `design-taste-frontend` (`taste-skill`) or `frontend-design` + `impeccable` `SKILL.md` (UI projects), `/browser` (recon only) |
+| **1A. Functional Spec** | `/grill-me` (product, architecture & constraints discovery), `/plan`, `references/stack-matrix.md`, `references/skills-and-safety.md` |
+| **1B. Design Spec (UI)** | *(UI projects, after 1A locks)* Read `design-taste-frontend` (`taste-skill`) or `frontend-design` + `impeccable` `SKILL.md`; `/plan`; `/browser` (recon only, `references/recon.md`) |
 | **2. Connections** | `context7` MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected; GitHub MCP (scoped) |
 | **3. Organization** | `context7` before library/SDK calls; read `supabase`, `stripe-best-practices` `SKILL.md` if in stack; `test-driven-development` (red → green → refactor; skip T0 throwaways), `systematic-debugging` on errors, `verification-before-completion` & `requesting-code-review` on slices; conditional `subagent-driven-development` (T2 or 3+ independent slices) |
 | **4. Polish** | Read `impeccable` (polish, critique, audit), `design-taste-frontend` (`taste-skill` browser/finish gate, if chosen), `web-design-guidelines`, and `vercel-react-best-practices` (React/Next) `SKILL.md`; `/browser` |
@@ -42,6 +43,7 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 | Excuse | Reality |
 |---|---|
 | "User already gave colors/spec, so I'll design it myself" | Never bypass `design-taste-frontend`/`frontend-design` + `impeccable`. Read `SKILL.md` first. |
+| "I'll design the UI / `DESIGN.md` alongside 1A discovery to save turns" | UI skills require locked product, surface, stack, and schema specs. Finish and confirm Subphase 1A first, then load UI skills in Subphase 1B. |
 | "This task is simple / the skill is overkill" | Simple tasks drift fast. Check and read the phase's skills first. |
 | "I remember how this skill works" | Skills evolve. Always call `read_file` on the current `SKILL.md`. |
 | "I'll explore or write one quick file first" | Skills govern how you explore and plan. Check skills *before* acting. |
@@ -62,19 +64,24 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 
 ## 🏗️ Phase 1: S — Specification (Vision & Logic)
 
-1. **Discovery**: Conduct structured discovery (e.g., via `/grill-me`). Ask focused batches:
-   - *Core*: North Star goal, necessary integrations, source of truth, delivery payload, behavioral "Do Not" rules.
-   - *Production*: User personas, roles/access control, compliance/sensitivity, scale expectations, budget, stack constraints.
-   - *Design (UI)*: Target audience, aesthetic tone, reference products, anti-patterns.
-2. **Tier, Layer & Skill Selection**: Select Tier (T0 Prototype, T1 Production, T2 Scale) by presenting 2–3 concrete tier/stack options with tradeoffs for the user to pick. Complete the Layer Decision Table in `findings.md` using `references/stack-matrix.md`, and record which conditional skills and Platform Packs (`references/skills-and-safety.md`) Phases 2–5 will use.
-3. **Data-First Modeling**: In `architecture/schemas.md`, define input/output payload shapes, database entities/relations, roles/permissions matrix (for RLS), and API response/error contracts.
-4. **Visual Direction (UI — Skill-Driven, Never Solo)**: Never plan or invent a website's visual design, layout, or `DESIGN.md` on your own—even when the user provides colors, fonts, or reference images. First, locate and call `read_file` on the `SKILL.md` for `design-taste-frontend` (`taste-skill`, for websites, landing pages, portfolios, and product sites) or `frontend-design` (for app UIs/dashboards) **and** `impeccable`. If missing, stop and ask the user to install them via the commands in `references/skills-and-safety.md` (Section 2c). Plan the screen-by-screen layout, typography, token palette, and interaction rules strictly using the loaded skill's workflow (e.g., `taste-skill`'s business classification, `scripts/start.mjs`, `assets/layout/deal.mjs`, and House Rules), initialize `PRODUCT.md`, and merge all visual tokens into `DESIGN.md` as the single source of truth.
-5. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` covering critical assets, threat vectors, and mitigations.
-6. **Reconnaissance (Optional)**: If analyzing an existing reference site, consult `references/recon.md` and confirm the authorization class. Inspect layout and public, unauthenticated network flows using `/browser`. Never copy code, text, or assets verbatim.
-7. **Gate 1 Approval (Macro Blueprint — Stop)**: Present the Macro Blueprint in `task_plan.md` (full Phase 1 spec + high-level placeholders for Phases 2–5 with candidate skills mapped per phase; do **not** lock detailed Phase 2–5 code steps yet). Do not write code or exit Gate 1 until every item is satisfied and the user explicitly approves:
-   - [ ] Discovery, Tier (T0/T1/T2), 12-Layer Decision Table, and planned skills/packs recorded in `findings.md`.
-   - [ ] Data schemas, permissions matrix, and API contracts defined in `architecture/schemas.md`.
-   - [ ] (UI projects) `design-taste-frontend` (`taste-skill`) or `frontend-design` **and** `impeccable` `SKILL.md` files were read via `read_file` and used to plan `PRODUCT.md`, `DESIGN.md`, and the layout in `task_plan.md` (or the user explicitly approved skipping installation).
+Specification runs in two sequential subphases: confirm **Subphase 1A** before starting **Subphase 1B** (skip **Subphase 1B** for headless backends, CLIs, and automations).
+
+### Subphase 1A: Functional, Stack & Data Specification
+1. **Functional Discovery (`/grill-me`)**: Cover Core (North Star goal, integrations, source of truth, primary user actions/surfaces, delivery payload, behavioral "Do Not" rules) and Production (personas, roles/access, compliance, scale, budget, stack constraints). Defer visual/aesthetic questions to Subphase 1B.
+2. **Tier, Layer & Skill Selection**: Propose 2–3 Tier/stack options (T0/T1/T2) with tradeoffs; fill the 12-Layer Decision Table in `findings.md` via `references/stack-matrix.md`; classify surfaces (marketing/company site, app UI/dashboard, docs, or headless); record Subphase 1B UI skills (`design-taste-frontend` vs. `frontend-design` + `impeccable`, noting framework constraints like Next.js static export) and Phase 2–5 Platform Packs (`references/skills-and-safety.md`).
+3. **Data-First Modeling**: Define input/output payloads, DB entities/relations, RLS roles/permissions matrix, and API error/response contracts in `architecture/schemas.md` (right-size pure T0 static sites with no backend to static content/asset shapes only).
+4. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` (critical assets, vectors, mitigations).
+5. **Phase 1A Checkpoint — Confirm Functional Spec**: Present `findings.md` and `architecture/schemas.md` and pause for user confirmation that scope, stack, and schemas are locked. Headless projects proceed to **Gate 1 Approval**; UI projects advance to **Subphase 1B**.
+
+### Subphase 1B: Design & UI Specification (Conditional — UI Projects Only)
+1. **Load UI Skills First (Never Solo)**: Never invent visual design, layout, or `DESIGN.md` solo—even when given colors, fonts, or references. Using Subphase 1A's locked surfaces, call `read_file` on `design-taste-frontend` (`taste-skill`, for websites, landing pages, portfolios, product/place sites) or `frontend-design` (for app UIs/dashboards) **and** `impeccable` `SKILL.md` (mapping per-surface skill/mode on hybrid builds). If missing, stop and ask to install via `references/skills-and-safety.md` (Section 2c).
+2. **Design Brief & Optional Reconnaissance**: Ask a concise design batch for unresolved visual inputs (audience mood, brand/copy voice, existing logos/photos, aesthetic anti-patterns). For reference sites, follow `references/recon.md` authorization tiers and inspect via `/browser` without verbatim copying.
+3. **Skill-Driven Visual Specification**: Grounded in Subphase 1A's locked routes and `architecture/schemas.md` shapes, run the loaded skill's planning workflow (e.g., `impeccable` `init`/surface modes for `PRODUCT.md`, plus `taste-skill`'s business classification, copy-first rules, `scripts/start.mjs`, `assets/layout/deal.mjs`, and House Rules, or `frontend-design`'s two-pass token/wireframe review). Author `PRODUCT.md`, merge all tokens into `DESIGN.md`, and record the screen-by-screen UI plan in `task_plan.md`.
+
+### Gate 1 Approval (Macro Blueprint — Hard Stop)
+Present the Macro Blueprint in `task_plan.md` (locked Subphase 1A + Subphase 1B spec + high-level Phase 2–5 placeholders; do **not** lock detailed Phase 2–5 code steps yet). Do not write `src/` or `tools/` code or exit Gate 1 until approved:
+- [ ] **Subphase 1A locked**: Functional discovery, Tier (T0/T1/T2), 12-Layer Decision Table, planned skills/packs, T1+ threat sketch (`findings.md`), and right-sized schemas/contracts (`architecture/schemas.md`) confirmed.
+- [ ] **Subphase 1B locked (UI projects)**: `design-taste-frontend` (`taste-skill`) or `frontend-design` **and** `impeccable` `SKILL.md` read via `read_file` and used to author `PRODUCT.md`, `DESIGN.md`, and the screen-by-screen UI plan in `task_plan.md` (or install explicitly skipped by user).
 
 ---
 

@@ -1,6 +1,6 @@
 # Reconnaissance: Analyzing Reference Web Applications
 
-Use this guide only when tasked with analyzing or rebuilding in the spirit of an existing web application. Reconnaissance is designed strictly for **comprehension and cleanroom design**, not extraction or code duplication.
+Use this guide when tasked with analyzing or rebuilding in the spirit of an existing web application—primarily during Subphase 1B visual/UX specification (or Subphase 1A only when observing public flows to scope functional features). Reconnaissance is designed strictly for **comprehension and cleanroom design**, not extraction or code duplication.
 
 ---
 

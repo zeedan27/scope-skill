@@ -34,9 +34,9 @@ These ship with the agent runtime and do not count toward the skill limit.
 |---|---|---|
 | `/scope` | Load the S.C.O.P.E. protocol and initialize a project or feature | All |
 | `/skills`, `/hooks`, `/mcp` | Verify loaded skills, hooks, and MCP servers | 0, 2 |
-| `/grill-me` | Conduct structured discovery interviews | 1 |
-| `/plan` | Produce a step-by-step plan before execution | 1 |
-| `/browser` | Isolated browser for recon, viewport/console checks, and staging smoke tests | 1, 3, 4, 5 |
+| `/grill-me` | Conduct structured functional & system discovery interviews | 1A |
+| `/plan` | Produce a step-by-step plan before execution | 1A, 1B (and per phase) |
+| `/browser` | Isolated browser for recon, viewport/console checks, and staging smoke tests | 1B, 3, 4, 5 |
 | `/learn` | Persist session learnings and project adjustments | 5 |
 
 ### 2b. Universal Core Skills
@@ -51,9 +51,9 @@ These ship with the agent runtime and do not count toward the skill limit.
 ### 2c. Frontend & UI Skills (Conditional — UI projects only)
 | Skill | Condition | Job | Phase | Source / Install Command |
 |---|---|---|---|---|
-| `design-taste-frontend` (`taste-skill`) | UI projects (pick one: `design-taste-frontend` or `frontend-design`) | Anti-slop art direction, dealt palette/type/hero tokens (merge into `DESIGN.md`), real-browser layout/perf checker, and finish gate for websites & landing pages | 1, 3, 4 | `npx skills add Leonxlnx/taste-skill --skill design-taste-frontend` |
-| `frontend-design` | UI projects (pick one: `frontend-design` or `design-taste-frontend`) | One-time aesthetic direction for app UIs/dashboards: palette, type, wireframes (merge into `DESIGN.md`) | 1 | `npx skills add anthropics/skills --skill frontend-design` |
-| `impeccable` | UI projects | `PRODUCT.md`/`DESIGN.md` setup, steering, polish, critique, anti-slop audit | 1, 4 | `npx skills add pbakaus/impeccable --skill impeccable` |
+| `design-taste-frontend` (`taste-skill`) | UI projects (pick one: `design-taste-frontend` or `frontend-design`) | Anti-slop art direction, dealt palette/type/hero tokens (merge into `DESIGN.md`), real-browser layout/perf checker, and finish gate for websites & landing pages | 1B, 3, 4 | `npx skills add Leonxlnx/taste-skill --skill design-taste-frontend` |
+| `frontend-design` | UI projects (pick one: `frontend-design` or `design-taste-frontend`) | One-time aesthetic direction for app UIs/dashboards: palette, type, wireframes (merge into `DESIGN.md`) | 1B | `npx skills add anthropics/skills --skill frontend-design` |
+| `impeccable` | UI projects | `PRODUCT.md`/`DESIGN.md` setup, steering, polish, critique, anti-slop audit | 1B, 4 | `npx skills add pbakaus/impeccable --skill impeccable` |
 | `web-design-guidelines` | UI projects | Accessibility (WCAG 2.1 AA), semantic markup, and UX audits | 4 | `npx skills add vercel-labs/agent-skills --skill web-design-guidelines` |
 | `vercel-react-best-practices` | React/Next.js UI projects | React/Next.js performance and hydration rules | 3, 4 | `npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices` |
 
@@ -62,7 +62,7 @@ These ship with the agent runtime and do not count toward the skill limit.
 |---|---|---|---|---|
 | `supabase` | Conditional: Supabase chosen (Layers 3, 4, 8) | Schema, auth, RLS, and local CLI emulation patterns | 3 | `npx skills add supabase/agent-skills --skill supabase` |
 | `stripe-best-practices` | Conditional: payments in scope (Layers 2, 8) | Checkout, webhook verification, and sandbox testing | 3 | `npx skills add stripe/ai --skill stripe-best-practices` |
-| `designlang` | Optional: during recon after Section 6 vetting | Local design-token extractor outputting to `.tmp/recon/` (`references/recon.md`) | 1 | Local CLI extractor (`references/recon.md`; vet per Section 6) |
+| `designlang` | Optional: during recon after Section 6 vetting | Local design-token extractor outputting to `.tmp/recon/` (`references/recon.md`) | 1B | Local CLI extractor (`references/recon.md`; vet per Section 6) |
 | `subagent-driven-development` | Conditional: T2 scale or Phase 3 with 3+ independent vertical slices | Execute independent planned slices via isolated subagents with review gates | 3 | `npx skills add obra/superpowers --skill subagent-driven-development` |
 
 ### 2e. Skill Count Rule
@@ -70,9 +70,9 @@ Keep at most 10 core skills and about 14 skills in total (built-in slash command
 
 ### 2f. Missing-Skill & Phase-Entry Planning Protocol — Never Improvise Alone
 1. **Check local installation:** Look in your loaded `<skills>` list and local skill directories (`.agents/skills/`, `.claude/skills/`, `~/.gemini/config/skills/`, `~/.claude/skills/`).
-2. **Stop and ask before bypassing:** If a skill required for the active phase (especially `design-taste-frontend` or `frontend-design` plus `impeccable` in Phase 1 for UI projects) is missing, **do not invent the design or workflow yourself**. Present the exact `npx skills add` command from Tables 2b–2d (append `-g` for global install) and ask the user whether to install it or explicitly approve skipping it.
+2. **Stop and ask before bypassing:** If a skill required for the active phase or subphase (especially `design-taste-frontend` or `frontend-design` plus `impeccable` in Subphase 1B for UI projects, after Subphase 1A locks functional specs) is missing, **do not invent the design or workflow yourself**. Present the exact `npx skills add` command from Tables 2b–2d (append `-g` for global install) and ask the user whether to install it or explicitly approve skipping it.
 3. **Read before designing:** Once installed (or already present), call `read_file` on its `SKILL.md` and follow its workflow before authoring `PRODUCT.md`, `DESIGN.md`, or implementation code.
-4. **Plan one phase at a time from its skills:** At the start of each phase (`1` through `5`), read that phase's required `SKILL.md` files first, then write that phase's detailed execution plan in `task_plan.md`. Complete the phase, record proof in `progress.md`, and stop at the phase boundary before planning the next phase.
+4. **Plan one phase or subphase at a time from its skills:** At the start of each phase or subphase (`1A`, `1B`, and `2` through `5`), read that step's required `SKILL.md` files first, then write its detailed execution plan in `task_plan.md`. Complete the step, record proof in `progress.md`, and stop at the checkpoint/boundary before planning the next step.
 
 ---
 

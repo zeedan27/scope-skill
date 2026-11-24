@@ -14,14 +14,14 @@ The **S.C.O.P.E. Framework** turns probabilistic LLMs into reliable, determinist
 ```
   ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐     ┌──────────────┐     ┌─────────────────┐
   │ S:Specification │ ──> │  C:Connections  │ ──> │ O:Organization  │ ──> │   P:Polish   │ ──> │   E:Execution   │
-  │ (Data & Logic)  │     │ (Auth & Links)  │     │ (3-Layer Build) │     │ (UI & Perf)  │     │ (Gated Release) │
+  │ (1A Spec/1B UI) │     │ (Auth & Links)  │     │ (3-Layer Build) │     │ (UI & Perf)  │     │ (Gated Release) │
   └─────────────────┘     └─────────────────┘     └─────────────────┘     └──────────────┘     └─────────────────┘
            │                                                                                             │
         Gate 1: Blueprint Approval                                                                   Gate 2: Production Gate
 ```
 
 ### The 5 Phases:
-1. **Specification** *(formerly Blueprint)*: Deep discovery, tier definition (T0/T1/T2), 12-layer stack evaluation, data-first schemas, and UI design token definition. **Gate 1 Hard Halt.**
+1. **Specification** *(formerly Blueprint)*: Runs in two sequential subphases — **Subphase 1A** (`/grill-me` functional discovery, T0/T1/T2 tiering, 12-layer stack evaluation, and data-first schemas) followed once locked by **Subphase 1B** *(UI projects)* (skill-driven `PRODUCT.md`, `DESIGN.md`, and screen specs via `design-taste-frontend` or `frontend-design` + `impeccable`). **Gate 1 Hard Halt.**
 2. **Connections** *(formerly Link)*: Credential posture, sandboxed handshakes, read-only MCP verification, and environment validation.
 3. **Organization** *(formerly Architect)*: 3-layer engineering build (Architecture SOPs → Navigation → Deterministic Tools). Vertical feature slices with mandatory test proof.
 4. **Polish** *(formerly Stylize)*: Payload formatting, UI accessibility audit (WCAG 2.1 AA), state completeness (Loading, Empty, Error), and zero leaked secrets.

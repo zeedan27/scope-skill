@@ -536,6 +536,9 @@ function checkAll() {
 
   // Verify rolling skill-first phase planning and phase-boundary checkpoints
   for (const requiredMarker of [
+    "Subphase 1A",
+    "Subphase 1B",
+    "Phase 1A Checkpoint",
     "Phase 2 Checkpoint",
     "Phase 3 Checkpoint",
     "Phase 4 Checkpoint",
