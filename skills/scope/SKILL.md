@@ -11,11 +11,12 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 - `references/stack-matrix.md`: The 12-layer stack, tier definitions (T0/T1/T2), and layer build standards.
 - `references/skills-and-safety.md`: Built-in commands, skill & MCP inventory, platform packs, skill count rule, strict vetting checklist, and permission posture.
 - `references/config-templates.md`: Settings, hooks, MCP configs, git secret scanning, and UI rule templates.
-- `references/caching-and-scaling.md`: Cache-control headers, Redis patterns, rate-limit rollouts, probes, and autoscaling.
+- `references/caching-and-scaling.md`: Cache-control headers, HTTP security headers, Redis patterns, rate-limit rollouts, probes, and autoscaling.
+- `references/ai-and-agents.md`: Runtime AI/LLM and embedded-agent guardrails, tool boundaries, spend caps, and baseline evals (conditional: AI features only).
 - `references/recon.md`: Safe inspection of existing sites (authorization tiers, safety rules, cleanroom recreation).
 
 ## Operating Principles
-1. **Work & Plan Phase-by-Phase (Read Skills → Plan Phase → Execute → Stop)**: Never write a detailed implementation plan for all 5 phases upfront. Greenfield projects run Phases `0 → 5`, while already-initialized S.C.O.P.E. repos enter via **Post-Launch Continuation (`Cycle N+1`)** tracks rather than repeating Phase 0. Phase 1 executes sequentially as **Subphase 1A** (functional, stack, and schema spec + confirmation) followed—for UI projects—by **Subphase 1B** (skill-driven UI/design spec), culminating in Gate 1. At the start of each phase or subphase: (a) check required skills, ask to install missing ones from `references/skills-and-safety.md`, and call `read_file` on their `SKILL.md` files first; (b) write an elaborate plan for **only** the active step in `task_plan.md` using those loaded skills (in `/plan` mode, scope each plan handoff to a single phase or `1A`/`1B` subphase); (c) execute and verify that step; and (d) **stop at the checkpoint/boundary**, present proof in `progress.md`, and wait for user approval before advancing.
+1. **Work & Plan Phase-by-Phase (Read Skills → Plan Phase → Execute → Stop)**: Never write a detailed implementation plan for all 5 phases upfront. Greenfield projects run Phases `0 → 5`, while already-initialized S.C.O.P.E. repos enter via **Post-Launch Continuation (`Cycle N+1`)** tracks rather than repeating Phase 0. Phase 1 executes sequentially as **Subphase 1A** (functional, stack, and schema spec + confirmation) followed—for UI projects—by **Subphase 1B** (skill-driven UI/design spec), culminating in Gate 1. At the start of each phase or subphase: (a) check required skills, ask to install missing ones from `references/skills-and-safety.md`, and call `read_file` on their `SKILL.md` files first; (b) write an elaborate plan for **only** the active step in `task_plan.md` using those loaded skills (in `/plan` mode, scope each plan handoff to a single phase or `1A`/`1B` subphase); (c) execute and verify that step; and (d) **stop at the checkpoint/boundary**, present proof in `progress.md`, and wait for user approval before advancing. Because law and memory files preserve state, start a fresh session at phase/cycle boundaries if context grows noisy, and isolate concurrent work on separate branches or worktrees.
 2. **Deterministic Over Probabilistic**: LLMs reason probabilistically; business logic, schemas, and tests must be deterministic.
 3. **Data-First**: Define schemas and contracts in `architecture/schemas.md` before writing executable code.
 4. **Never Skip Gates or Phase Checkpoints**: Gate 1 (Phase 1), Phase 2–4 Checkpoints, and Gate 2 (Phase 5) require stopping and obtaining explicit user confirmation before advancing.
@@ -32,10 +33,10 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 | Phase | Skills & Tools |
 |---|---|
 | **0. Init** | Inspect loaded `<skills>` & `<mcp_servers>` (or built-in `/skills`, `/hooks`, `/mcp`); read `references/skills-and-safety.md` |
-| **1A. Functional Spec** | `/grill-me` (product, architecture & constraints discovery), `/plan`, `references/stack-matrix.md`, `references/skills-and-safety.md` |
+| **1A. Functional Spec** | `/grill-me` (product, architecture & constraints discovery), `/plan`, `references/stack-matrix.md`, `references/skills-and-safety.md`, `references/ai-and-agents.md` (if AI in scope) |
 | **1B. Design Spec (UI)** | *(UI projects, after 1A locks)* Read `design-taste-frontend` (`taste-skill`) or `frontend-design` + `impeccable` `SKILL.md`; `/plan`; `/browser` (recon only, `references/recon.md`) |
 | **2. Connections** | `context7` MCP (docs); platform MCPs (e.g. Supabase, Stripe) if selected; GitHub MCP (scoped) |
-| **3. Organization** | `context7` before library/SDK calls; read `supabase`, `stripe-best-practices` `SKILL.md` if in stack; `test-driven-development` (red → green → refactor; skip T0 throwaways), `systematic-debugging` on errors, `verification-before-completion` & `requesting-code-review` on slices; conditional `subagent-driven-development` (T2 or 3+ independent slices) |
+| **3. Organization** | `context7` before library/SDK calls; read `supabase`, `stripe-best-practices` `SKILL.md` if in stack; `references/ai-and-agents.md` (if AI in scope); `test-driven-development` (red → green → refactor; skip T0 throwaways), `systematic-debugging` on errors, `verification-before-completion` & `requesting-code-review` on slices; conditional `subagent-driven-development` (T2 or 3+ independent slices) |
 | **4. Polish** | Read `impeccable` (polish, critique, audit), `design-taste-frontend` (`taste-skill` browser/finish gate, if chosen), `web-design-guidelines`, and `vercel-react-best-practices` (React/Next) `SKILL.md`; `/browser` |
 | **5. Execution** | `/browser` staging smoke tests; `requesting-code-review` pre-Gate 2 check; chosen platform pack; read-only infrastructure & observability MCPs; `/learn` to record session learnings |
 
@@ -54,9 +55,9 @@ Always read `references/skills-and-safety.md` and `references/stack-matrix.md` d
 
 ## 🟢 Phase 0: Initialization (Mandatory Setup)
 
-*Greenfield projects only — if `AGENTS.md` and `architecture/schemas.md` already exist on an initialized repo, skip Phase 0 and jump directly to **🔄 Post-Launch Continuation (`Cycle N+1`)**.*
+*Greenfield & Brownfield/Migration init — if `AGENTS.md` and `architecture/schemas.md` already exist on an initialized repo, skip Phase 0 and jump directly to **🔄 Post-Launch Continuation (`Cycle N+1`)**.*
 
-1. **Project Memory**: Create `task_plan.md` (phases, checklists), `findings.md` (research, constraints, Layer Decision Table), and `progress.md` (action log, test evidence).
+1. **Project Memory**: Create `task_plan.md` (phases, checklists), `findings.md` (research, constraints, Layer Decision Table), and `progress.md` (action log, test evidence). For existing non-S.C.O.P.E. repos or migrations, inspect code read-only first to reverse-populate `findings.md` (incumbent 12-layer state plus non-portable state: live DB data, user accounts, secrets, webhooks, DNS) and `architecture/schemas.md` without overwriting `.git` or valid configs.
 2. **Law Documents**: Initialize `architecture/schemas.md`, `architecture/decisions.md` (ADR log), and `architecture/maintenance.md`.
 3. **Constitution**: Copy `templates/AGENTS.template.md` to project root as `AGENTS.md` (no frontmatter). If using Claude Code, symlink `CLAUDE.md` to `AGENTS.md`.
 4. **Hygiene**: Initialize git (`git init`). Ensure `.gitignore` excludes `.env*` (except `.env.example`), `.tmp/`, `node_modules/`, and `.worktrees/`. Create `.env.example` with variable names only.
@@ -71,9 +72,9 @@ Specification runs in two sequential subphases: confirm **Subphase 1A** before s
 
 ### Subphase 1A: Functional, Stack & Data Specification
 1. **Functional Discovery (`/grill-me`)**: Cover Core (North Star goal, integrations, source of truth, primary user actions/surfaces, delivery payload, behavioral "Do Not" rules) and Production (personas, roles/access, compliance, scale, budget, stack constraints). Defer visual/aesthetic questions to Subphase 1B.
-2. **Tier, Layer & Skill Selection**: Propose 2–3 Tier/stack options (T0/T1/T2) with tradeoffs; fill the 12-Layer Decision Table in `findings.md` via `references/stack-matrix.md`; classify surfaces (marketing/company site, app UI/dashboard, docs, or headless); record Subphase 1B UI skills (`design-taste-frontend` vs. `frontend-design` + `impeccable`, noting framework constraints like Next.js static export) and Phase 2–5 Platform Packs (`references/skills-and-safety.md`).
+2. **Tier, Layer & Skill Selection**: Propose 2–3 Tier/stack options (T0/T1/T2) with tradeoffs; decide **SSR/SSG vs. SPA** upfront whenever public search/AI answer-engine discoverability or social previews matter (preventing costly SPA → SSR migrations); fill the 12-Layer Decision Table in `findings.md` via `references/stack-matrix.md`; read `references/ai-and-agents.md` if runtime AI/agents are in scope; classify surfaces (marketing/company site, app UI/dashboard, docs, or headless); record Subphase 1B UI skills (`design-taste-frontend` vs. `frontend-design` + `impeccable`, noting framework constraints like Next.js static export) and Phase 2–5 Platform Packs (`references/skills-and-safety.md`).
 3. **Data-First Modeling**: Define input/output payloads, DB entities/relations, RLS roles/permissions matrix, and API error/response contracts in `architecture/schemas.md` (right-size pure T0 static sites with no backend to static content/asset shapes only).
-4. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` (critical assets, vectors, mitigations).
+4. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` (critical assets, vectors, mitigations—including privilege escalation/self-role-upgrade, webhook replay/loop vectors, and prompt-injection/runaway-spend caps if AI is in scope).
 5. **Phase 1A Checkpoint — Confirm Functional Spec**: Present `findings.md` and `architecture/schemas.md` and pause for user confirmation that scope, stack, and schemas are locked. Headless projects proceed to **Gate 1 Approval**; UI projects advance to **Subphase 1B**.
 
 ### Subphase 1B: Design & UI Specification (Conditional — UI Projects Only)
@@ -99,7 +100,7 @@ Present the Macro Blueprint in `task_plan.md` (locked Subphase 1A + Subphase 1B 
    - External APIs and webhooks
    - Remote git repository and CI pipeline
    - Error tracking and logging capture
-5. **Least Privilege**: Configure keys with minimum required scopes. Keep development, staging, and production keys separated. MCP keys live only in user global configuration.
+5. **Least Privilege & Side-Effect Isolation**: Configure keys with minimum required scopes. Keep development, staging, and production keys separated. MCP keys live only in user global configuration. Pause or sandbox scheduled crons, outbound email/SMS, and live third-party webhooks in preview/staging/branch environments so non-production builds never contact real users or mutate live state.
 6. **Isolated Browser**: Run `/browser` in an isolated session or profile with no personal user data or credentials.
 7. **Phase 2 Checkpoint — Stop**: Record handshake results in `progress.md`, stop, and obtain user confirmation before reading Phase 3 skills and planning Phase 3.
 
@@ -107,7 +108,7 @@ Present the Macro Blueprint in `task_plan.md` (locked Subphase 1A + Subphase 1B 
 
 ## ⚙️ Phase 3: O — Organization (The 3-Layer Build)
 
-1. **Skill-First Phase 3 Plan**: Before writing code, read `references/stack-matrix.md`, `references/caching-and-scaling.md`, and every active stack skill's `SKILL.md` (`test-driven-development`, `requesting-code-review`, `verification-before-completion`, `systematic-debugging`, `supabase`, `stripe-best-practices`, chosen Layer 6/9/10 skills, `vercel-react-best-practices`, `design-taste-frontend`, plus conditional `subagent-driven-development` when T2 or 3+ independent slices apply) via `read_file` (ask to install if missing). Expand Phase 3 in `task_plan.md` by mapping target files and responsibilities first, then breaking work into bite-sized Vertical Feature Slices (`<= 5` code files per slice) with exact interfaces, test cases, and one checkable action per step (`write failing test → verify fail → implement → verify pass → review → commit`).
+1. **Skill-First Phase 3 Plan**: Before writing code, read `references/stack-matrix.md`, `references/caching-and-scaling.md`, `references/ai-and-agents.md` (if runtime AI/agents are in scope), and every active stack skill's `SKILL.md` (`test-driven-development`, `requesting-code-review`, `verification-before-completion`, `systematic-debugging`, `supabase`, `stripe-best-practices`, chosen Layer 6/9/10 skills, `vercel-react-best-practices`, `design-taste-frontend`, plus conditional `subagent-driven-development` when T2 or 3+ independent slices apply) via `read_file` (ask to install if missing). Expand Phase 3 in `task_plan.md` by mapping target files and responsibilities first, then breaking work into bite-sized Vertical Feature Slices (`<= 5` code files per slice) with exact interfaces, test cases, and one checkable action per step (`write failing test → verify fail → implement → verify pass → review → commit`).
 
 Follow the 3-Layer Architecture for every feature:
 - **Layer 1: Architecture (`architecture/`)**: Standard Operating Procedures (SOPs) in Markdown describing goals, inputs, logic, and error boundaries. Stack SOPs include `data.md`, `auth.md`, `security.md`, `rate-limiting.md`, `caching.md`, etc. *Rule: Update the SOP before modifying code.*
@@ -135,7 +136,8 @@ For each vertical feature slice:
 4. **Accessibility & UX**: Aesthetic steering does not prove accessibility—audit against `web-design-guidelines` `SKILL.md`. Verify real WCAG contrast ratios, `:focus-visible` outlines, keyboard navigability, semantic tags, and explicit form labels.
 5. **State Completeness**: Ensure every view handles 5 essential states: Loading, Empty, Success, Partial Error, and Fatal Error.
 6. **Framework Performance**: For React/Next.js, apply `vercel-react-best-practices` `SKILL.md`. Sanitize bundles to ensure no environment secrets leak client-side.
-7. **Phase 4 Checkpoint & User Review — Stop**: Demonstrate working flows and audit passes via `/browser` or screenshots, log proof in `progress.md`, and stop for explicit user sign-off before reading Phase 5 skills and planning Phase 5.
+7. **Discoverability, Compliance & Localization (Conditional)**: On public/marketing surfaces, verify `<title>`, favicon, Open Graph metadata, `robots.txt`, and `sitemap.xml`; when user accounts or personal data exist, verify privacy/terms pages and an in-app account + data deletion path; when i18n is in scope, translate target locales **only after base-language copy freezes**, verifying RTL layout and locale date/number/currency formatting.
+8. **Phase 4 Checkpoint & User Review — Stop**: Demonstrate working flows and audit passes via `/browser` or screenshots, log proof in `progress.md`, and stop for explicit user sign-off before reading Phase 5 skills and planning Phase 5.
 
 ---
 
@@ -145,16 +147,18 @@ For each vertical feature slice:
 Do not deploy until all items are validated and logged in `progress.md`, or explicitly marked Deferred in the Layer Decision Table:
 - [ ] Local and CI builds, typechecks, and tests pass with fresh evidence.
 - [ ] Secret scan passes (e.g. gitleaks); no secrets in git history, configs, or captures; `.env.example` is complete.
-- [ ] Authentication verified per role, including negative (unauthorized) access tests.
-- [ ] Row-Level Security (RLS) verified: User A cannot read or modify User B's records.
+- [ ] Authentication verified per role: server-derived session identity, negative (unauthorized) access tests, no self-role elevation, and OAuth apps out of provider testing-mode caps.
+- [ ] Row-Level Security (RLS) **and field-level projection** verified: User A cannot read or modify User B's records, and shared/public responses strip private fields.
+- [ ] Server-authoritative pricing/entitlements, webhook signature/replay/loop guards, and HTTP security headers (`HSTS`, clickjacking `CSP` / `X-Frame-Options`, `Permissions-Policy`, `HttpOnly`/`Secure` cookies) verified; zero open Critical findings (any waived lower-severity finding logged as Accepted Risk in `architecture/decisions.md`).
 - [ ] Rate limiting active on sensitive/public endpoints (dry-run validated first).
+- [ ] Preview/branch crons and outbound messaging isolated from production; runtime AI guardrails, two-tier spend/step caps, and baseline + refusal evals verified (`references/ai-and-agents.md`, if AI in scope).
 - [ ] Database migrations execute cleanly; backup verified (T1+).
 - [ ] Dependency security audit clean.
 - [ ] Structured logging and error tracker verified with a test event.
 - [ ] Health and readiness endpoints (`/healthz/live`, `/healthz/ready`, and `/healthz/startup` if startup is slow) verified.
 - [ ] Documented rollback procedure verified.
 - [ ] Cost caps and budget alerts set (T1+).
-- [ ] Staging smoke test passed via `/browser`.
+- [ ] Staging smoke test passed via `/browser` using **Steps → Explicit Success Criteria → Cleanup** across dedicated test accounts/roles (signed-out + multi-user/role handoff; distinguish Assertion Failures from Execution Errors in `progress.md`).
 - [ ] Final code review completed via `requesting-code-review` (T1+).
 - [ ] Deployment follows the Deploy Rule (Execution Step 2): `git status` is clean, `.gitignore` and platform ignore files exclude secrets, and staging/preview comes first.
 

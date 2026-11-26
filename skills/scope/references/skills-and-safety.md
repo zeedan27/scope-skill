@@ -97,6 +97,8 @@ Every MCP server referenced across the protocol appears here. Workspace configs 
 
 Infrastructure MCP servers connect **only in Phase 5**, read-only, and are disconnected afterward. Never connect them during recon.
 
+*Build-Time MCPs vs. Runtime App Integrations:* MCP servers connected to the coding agent are personal, build-time developer tools used during construction. Deployed applications never call coding-agent MCPs and must use their own environment-scoped secrets and server-side SDKs verified in Phase 2.
+
 ---
 
 ## 4. Platform Packs (Install selectively based on Layer Decision Table)
@@ -159,3 +161,5 @@ Before installing any new agent skill, package, or MCP server:
 - **Nesting Limits:** Skills are discovered one level deep: `skills/<name>/SKILL.md`.
 - **Cross-Platform Tooling:** Hooks in Antigravity use native tool names (`run_command`, `write_file`, etc.), whereas Claude Code relies on its own tool nomenclature. Keep hook commands quoted and avoid bare `.sh` hook commands on Windows. If `design-taste-frontend` (`taste-skill`) is used on Windows, invoke its `gate.mjs` script via a quoted `node` command rather than a POSIX `for f in ...` shell hook, and ignore `.taste-skill/` in `.gitignore`.
 - **Secret Separation:** Workspace configs (`.agents/mcp_config.json`) are committed to version control and must remain completely secret-free. Personal API keys belong solely in global user configuration files.
+- **Preview & Branch Side-Effect Isolation:** Preview, staging, and branch deployments run the same codebase (including scheduled cron jobs and webhook consumers). Pause or sandbox crons, outbound email/SMS, and live third-party mutations outside production so test branches never contact real users or mutate live systems.
+- **Session & Parallel-Agent Hygiene:** Because `AGENTS.md`, `task_plan.md`, `findings.md`, and `progress.md` persist state deterministically, start a fresh chat/session at phase or cycle boundaries to avoid long-context drift. Never run two write-capable agents concurrently on the same branch against overlapping files—isolate parallel slices in separate git branches or worktrees.

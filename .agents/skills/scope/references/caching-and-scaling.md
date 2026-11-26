@@ -1,6 +1,6 @@
-# Caching, Rate Limiting, Load Balancing, and Scaling
+# Caching, Security Headers, Rate Limiting, and Scaling
 
-Consult these reference standards whenever Layers 9, 10, or 11 are marked Required or Lite in the Layer Decision Table.
+Consult these reference standards whenever Layers 8, 9, 10, or 11 are marked Required or Lite in the Layer Decision Table.
 
 ---
 
@@ -48,3 +48,13 @@ Consult these reference standards whenever Layers 9, 10, or 11 are marked Requir
 - **Timeout Alignment:** Maintain keep-alive timeouts longer than upstream proxy/load balancer idle timeouts (e.g., server keep-alive of 65s behind a 60s proxy) to eliminate intermittent HTTP 502 errors.
 - **Database Connection Pooling:** Maintain total worker connections below the database's `max_connections` threshold. Deploy transactional poolers (e.g., PgBouncer, Supavisor) when scaling out horizontally.
 - **Autoscaling:** Trigger scaling events based on request concurrency, queue backlog, or p95 response latency rather than CPU utilization alone. Scale up aggressively; scale down conservatively with stabilization windows. Set firm instance maximums.
+
+---
+
+## 5. HTTP Security Headers & Transport Hardening
+Apply these response headers and transport rules across static hosts (`_headers`/CDN rules) and SSR/API servers:
+- **HTTPS & MIME Sniffing:** Redirect plain HTTP to HTTPS and set `X-Content-Type-Options: nosniff`.
+- **Clickjacking (`CSP` / `X-Frame-Options`):** Set `Content-Security-Policy: frame-ancestors 'none'` (or `'self'` plus explicit allowed embed origins) paired with `X-Frame-Options: DENY` or `SAMEORIGIN`.
+- **HSTS (`Strict-Transport-Security`):** Start with a conservative `max-age` (e.g., `max-age=2592000`); add `includeSubDomains` and `preload` (`max-age=31536000`) only when HTTPS is permanent across every subdomain. *Migration warning:* HSTS locks browsers into HTTPS until `max-age` expires—disable HSTS and let `max-age` lapse before moving any domain or subdomain off HTTPS.
+- **`Permissions-Policy`:** Explicitly disable unused sensitive browser APIs (e.g., `camera=(), microphone=(), geolocation=(), payment=()`).
+- **Cookie Attributes:** Enforce `HttpOnly; Secure; SameSite=Lax` (or `Strict`) on all authentication and session cookies.

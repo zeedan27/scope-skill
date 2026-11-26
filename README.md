@@ -23,11 +23,11 @@ The **S.C.O.P.E. Framework** turns probabilistic LLMs into reliable, determinist
 ```
 
 ### The 5 Phases:
-1. **Specification** *(formerly Blueprint)*: Runs in two sequential subphases — **Subphase 1A** (`/grill-me` functional discovery, T0/T1/T2 tiering, 12-layer stack evaluation, and data-first schemas) followed once locked by **Subphase 1B** *(UI projects)* (skill-driven `PRODUCT.md`, `DESIGN.md`, and screen specs via `design-taste-frontend` or `frontend-design` + `impeccable`). **Gate 1 Hard Halt.**
-2. **Connections** *(formerly Link)*: Credential posture, sandboxed handshakes, read-only MCP verification, and environment validation.
-3. **Organization** *(formerly Architect)*: 3-layer engineering build (Architecture SOPs → Navigation → Deterministic Tools). Vertical feature slices with mandatory test proof.
-4. **Polish** *(formerly Stylize)*: Payload formatting, UI accessibility audit (WCAG 2.1 AA), state completeness (Loading, Empty, Error), and zero leaked secrets.
-5. **Execution** *(formerly Trigger)*: Automated Gate 2 production readiness checklist, Git-driven deployment, CDN/cache optimization, and operational runbooks.
+1. **Specification** *(formerly Blueprint)*: Runs in two sequential subphases — **Subphase 1A** (`/grill-me` functional discovery, brownfield/migration onboarding if existing code lacks `AGENTS.md`, T0/T1/T2 tiering, SSR vs. SPA rendering choice, 12-layer stack evaluation, runtime AI guardrails if applicable, and data-first schemas) followed once locked by **Subphase 1B** *(UI projects)* (skill-driven `PRODUCT.md`, `DESIGN.md`, and screen specs via `design-taste-frontend` or `frontend-design` + `impeccable`). **Gate 1 Hard Halt.**
+2. **Connections** *(formerly Link)*: Credential posture, sandboxed handshakes, read-only MCP verification, environment validation, and preview/branch side-effect isolation.
+3. **Organization** *(formerly Architect)*: 3-layer engineering build (Architecture SOPs → Navigation → Deterministic Tools). Vertical feature slices with mandatory test proof and runtime AI tool/spend-cap boundaries when AI is in scope.
+4. **Polish** *(formerly Stylize)*: Payload formatting, UI accessibility audit (WCAG 2.1 AA), state completeness (Loading, Empty, Error), public SEO/compliance/i18n freeze checks, and zero leaked secrets.
+5. **Execution** *(formerly Trigger)*: Automated Gate 2 production readiness checklist (HTTP security headers, field-level RLS, multi-role `/browser` smoke flows, AI baseline/refusal evals), Git-driven deployment, CDN/cache optimization, and operational runbooks.
 
 ### Post-Launch Continuation (`Cycle N+1`):
 Once v1 ships (`AGENTS.md` + `architecture/schemas.md` exist), `/scope` skips Phase 0, checks `Deferred` revisit triggers in `findings.md`, archives completed `task_plan.md` / verbose `progress.md` logs to `architecture/archive/`, and routes ongoing work into one of three tracks:
@@ -139,7 +139,8 @@ skills/scope/
     ├── stack-matrix.md               # The 12 infrastructure layers & tier standards
     ├── skills-and-safety.md          # Built-ins, skill & MCP inventory, packs & vetting
     ├── config-templates.md           # Permissions, hooks, MCP configs & UI rules
-    ├── caching-and-scaling.md        # Cache headers, Redis, probes & scaling limits
+    ├── caching-and-scaling.md        # Cache & HTTP security headers, Redis, probes & scaling
+    ├── ai-and-agents.md              # Runtime AI/agent guardrails, spend caps & evals (conditional)
     └── recon.md                      # Safe inspection of reference websites
 ```
 

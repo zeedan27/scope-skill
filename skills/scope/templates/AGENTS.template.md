@@ -40,11 +40,11 @@ If a skill or agent instruction conflicts with a higher level, prioritize the hi
 Never maintain duplicate copies of any fact across files.
 
 ## Always
-- At the start of a session, new post-launch cycle, or after context compaction: read `task_plan.md`, `progress.md`, `findings.md` (including Deferred revisit triggers), and `git log -5` before taking actions.
+- At the start of a session, new post-launch cycle, or after context compaction: read `task_plan.md`, `progress.md`, `findings.md` (including Deferred revisit triggers), and `git log -5` before taking actions. Start a fresh session at phase/cycle boundaries if context grows long, and isolate concurrent agent work on separate git branches or worktrees so two agents never edit the same file simultaneously.
 - Before planning any phase or `1A`/`1B` subphase (or calling `exit_plan_mode`), read that step's assigned `SKILL.md` files via `read_file` so the skills drive the plan; scope each `/plan` turn to a single phase or subphase.
 - Update the relevant SOP in `architecture/` before modifying business logic.
 - Run typechecks, unit tests, and builds, displaying fresh terminal output before marking any task as complete.
-- Enforce strict boundary validation. Implement default-deny authorization and Row-Level Security (RLS) on all user-owned tables.
+- Enforce strict boundary validation, session-derived identity, no self-role elevation, default-deny authorization, Row-Level Security (RLS), and field-level projection on shared responses; consult `references/ai-and-agents.md` whenever runtime AI/agents are in scope.
 - Consult up-to-date documentation using the context7 MCP before authoring library or SDK integrations.
 - Keep commits small, focused, and formatted with Conventional Commits.
 
@@ -57,6 +57,7 @@ Never maintain duplicate copies of any fact across files.
 
 ## Never
 - Read, print, stage, or commit `.env` files or raw secret values.
+- Trust client-supplied user IDs, roles, or prices/totals, or allow preview/branch crons and tests to send real user communications or mutate production third-party state.
 - Store plain-text API credentials in committed configuration files.
 - Bypass terminal sandboxing or elevate permissions unprompted.
 - Violate the Deploy Rule (see `references/skills-and-safety.md`, Section 1): deploy only committed code, through Git (the platform's Git integration or CI) or the platform's own CLI with the user's approval. Before any CLI deploy: `git status` is clean, ignore files (`.gitignore` and the platform's ignore file) are verified to exclude secrets, and staging or preview comes first. Never use tools that upload a local folder or file contents as tool arguments (for example `deploy-to-vercel`, `cloud-run/deploy-local-folder`, or inline MCP file deploys).
