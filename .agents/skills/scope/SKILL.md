@@ -72,7 +72,7 @@ Specification runs in two sequential subphases: confirm **Subphase 1A** before s
 
 ### Subphase 1A: Functional, Stack & Data Specification
 1. **Functional Discovery (`/grill-me`)**: Cover Core (North Star goal, integrations, source of truth, primary user actions/surfaces, delivery payload, behavioral "Do Not" rules) and Production (personas, roles/access, compliance, scale, budget, stack constraints). Defer visual/aesthetic questions to Subphase 1B.
-2. **Tier, Layer & Skill Selection**: Propose 2–3 Tier/stack options (T0/T1/T2) with tradeoffs; decide **SSR/SSG vs. SPA** upfront whenever public search/AI answer-engine discoverability or social previews matter (preventing costly SPA → SSR migrations); fill the 12-Layer Decision Table in `findings.md` via `references/stack-matrix.md`; read `references/ai-and-agents.md` if runtime AI/agents are in scope; classify surfaces (marketing/company site, app UI/dashboard, docs, or headless); record Subphase 1B UI skills (`design-taste-frontend` vs. `frontend-design` + `impeccable`, noting framework constraints like Next.js static export) and Phase 2–5 Platform Packs (`references/skills-and-safety.md`).
+2. **Tier, Layer & Skill Selection**: Propose 2–3 Tier/stack options (T0/T1/T2) with tradeoffs; decide **SSR/SSG vs. SPA** upfront whenever public search/AI answer-engine discoverability or social previews matter (preventing costly SPA → SSR migrations); fill the 12-Layer Decision Table in `findings.md` via `references/stack-matrix.md` (verifying live host ToS/commercial-use eligibility, ephemeral-disk/sleep/expiring-DB constraints, and hard-cap suspension vs. metered overage behavior); read `references/ai-and-agents.md` if runtime AI/agents are in scope; classify surfaces (marketing/company site, app UI/dashboard, docs, or headless); record Subphase 1B UI skills (`design-taste-frontend` vs. `frontend-design` + `impeccable`, noting framework constraints like Next.js static export) and Phase 2–5 Platform Packs (`references/skills-and-safety.md`).
 3. **Data-First Modeling**: Define input/output payloads, DB entities/relations, RLS roles/permissions matrix, and API error/response contracts in `architecture/schemas.md` (right-size pure T0 static sites with no backend to static content/asset shapes only).
 4. **Threat Modeling (T1+)**: Add a 1-page threat sketch in `findings.md` (critical assets, vectors, mitigations—including privilege escalation/self-role-upgrade, webhook replay/loop vectors, and prompt-injection/runaway-spend caps if AI is in scope).
 5. **Phase 1A Checkpoint — Confirm Functional Spec**: Present `findings.md` and `architecture/schemas.md` and pause for user confirmation that scope, stack, and schemas are locked. Headless projects proceed to **Gate 1 Approval**; UI projects advance to **Subphase 1B**.
@@ -97,7 +97,7 @@ Present the Macro Blueprint in `task_plan.md` (locked Subphase 1A + Subphase 1B 
 4. **Handshake Verification**: Build and execute minimal test scripts to verify:
    - Database read/write access
    - Auth provider connection
-   - External APIs and webhooks
+   - External APIs and webhooks (including any free-tier outbound network, SMTP port, or account-verification restrictions)
    - Remote git repository and CI pipeline
    - Error tracking and logging capture
 5. **Least Privilege & Side-Effect Isolation**: Configure keys with minimum required scopes. Keep development, staging, and production keys separated. MCP keys live only in user global configuration. Pause or sandbox scheduled crons, outbound email/SMS, and live third-party webhooks in preview/staging/branch environments so non-production builds never contact real users or mutate live state.
@@ -157,7 +157,7 @@ Do not deploy until all items are validated and logged in `progress.md`, or expl
 - [ ] Structured logging and error tracker verified with a test event.
 - [ ] Health and readiness endpoints (`/healthz/live`, `/healthz/ready`, and `/healthz/startup` if startup is slow) verified.
 - [ ] Documented rollback procedure verified.
-- [ ] Cost caps and budget alerts set (T1+).
+- [ ] Cost caps, budget alerts, and quota-exhaustion behavior (hard-cap suspension vs. metered overage billing) verified; commercial-use ToS and durable (non-expiring, non-ephemeral) storage confirmed (T1+).
 - [ ] Staging smoke test passed via `/browser` using **Steps → Explicit Success Criteria → Cleanup** across dedicated test accounts/roles (signed-out + multi-user/role handoff; distinguish Assertion Failures from Execution Errors in `progress.md`).
 - [ ] Final code review completed via `requesting-code-review` (T1+).
 - [ ] Deployment follows the Deploy Rule (Execution Step 2): `git status` is clean, `.gitignore` and platform ignore files exclude secrets, and staging/preview comes first.
