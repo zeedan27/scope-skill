@@ -321,11 +321,11 @@ function checkAll() {
     }
   }
 
-  // (c) SKILL.md frontmatter, name match, description <= 1024 chars, < 500 lines
+  // (c) SKILL.md frontmatter, name match, description <= 1024 chars, < 250 lines
   const skillMd = filesContent["SKILL.md"] || "";
   const skillLines = skillMd.split(/\r?\n/);
-  if (skillLines.length >= 500) {
-    fail(`SKILL.md must be under 500 lines (found ${skillLines.length})`);
+  if (skillLines.length >= 250) {
+    fail(`SKILL.md must be under 250 lines (found ${skillLines.length})`);
   }
   const fmMatch = skillMd.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
   if (!fmMatch) {
@@ -551,6 +551,10 @@ function checkAll() {
     "Track A: Delta S.C.O.P.E.",
     "Track B: Fast-Path Anneal",
     "Track C: Refinement Loop",
+    "references/spec-and-convergence.md",
+    "NEEDS CLARIFICATION",
+    "Consistency Audit",
+    "Convergence Audit",
   ]) {
     if (!skillMd.includes(requiredMarker)) {
       fail(`SKILL.md: missing '${requiredMarker}' rule`);
@@ -558,6 +562,26 @@ function checkAll() {
   }
   if (!agentsMd.includes("Phase-Boundary Checkpoints")) {
     fail("templates/AGENTS.template.md: missing 'Phase-Boundary Checkpoints' rule");
+  }
+  if (!agentsMd.includes("Convergence Audit")) {
+    fail("templates/AGENTS.template.md: missing 'Convergence Audit' rule");
+  }
+
+  const specConvMd = filesContent["references/spec-and-convergence.md"];
+  if (!specConvMd) {
+    fail("Missing references/spec-and-convergence.md");
+  } else {
+    for (const marker of [
+      "Viability Triage",
+      "Ambiguity",
+      "Contract Semantics",
+      "Consistency Audit",
+      "Convergence Audit",
+    ]) {
+      if (!specConvMd.includes(marker)) {
+        fail(`references/spec-and-convergence.md: missing '${marker}' section`);
+      }
+    }
   }
 
   if (errors.length > 0) {

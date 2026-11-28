@@ -23,9 +23,9 @@ The **S.C.O.P.E. Framework** turns probabilistic LLMs into reliable, determinist
 ```
 
 ### The 5 Phases:
-1. **Specification** *(formerly Blueprint)*: Runs in two sequential subphases — **Subphase 1A** (`/grill-me` functional discovery, brownfield/migration onboarding if existing code lacks `AGENTS.md`, T0/T1/T2 tiering, SSR vs. SPA rendering choice, 12-layer stack evaluation, runtime AI guardrails if applicable, and data-first schemas) followed once locked by **Subphase 1B** *(UI projects)* (skill-driven `PRODUCT.md`, `DESIGN.md`, and screen specs via `design-taste-frontend` or `frontend-design` + `impeccable`). **Gate 1 Hard Halt.**
+1. **Specification** *(formerly Blueprint)*: Runs in two sequential subphases — **Subphase 1A** (optional `go`/`needs-clarification`/`kill` viability triage when validating an idea, `/grill-me` functional discovery with bounded `[NEEDS CLARIFICATION]` ambiguity scan & spec-quality check, brownfield/migration onboarding if existing code lacks `AGENTS.md`, T0/T1/T2 tiering, SSR vs. SPA rendering choice, 12-layer stack evaluation, runtime AI guardrails if applicable, and data-first schemas + T1+ observable contract semantics) followed once locked by **Subphase 1B** *(UI projects)* (skill-driven `PRODUCT.md`, `DESIGN.md`, and screen specs via `design-taste-frontend` or `frontend-design` + `impeccable`). **Gate 1 Hard Halt.**
 2. **Connections** *(formerly Link)*: Credential posture, sandboxed handshakes, read-only MCP verification, environment validation, and preview/branch side-effect isolation.
-3. **Organization** *(formerly Architect)*: 3-layer engineering build (Architecture SOPs → Navigation → Deterministic Tools). Vertical feature slices with mandatory test proof and runtime AI tool/spend-cap boundaries when AI is in scope.
+3. **Organization** *(formerly Architect)*: 3-layer engineering build (Architecture SOPs → Navigation → Deterministic Tools). Read-only pre-build Consistency Audit across law docs and `task_plan.md`, vertical feature slices with mandatory test proof and runtime AI tool/spend-cap boundaries when AI is in scope, and an append-only Convergence Audit against locked intent before the Phase 3 Checkpoint.
 4. **Polish** *(formerly Stylize)*: Payload formatting, UI accessibility audit (WCAG 2.1 AA), state completeness (Loading, Empty, Error), public SEO/compliance/i18n freeze checks, and zero leaked secrets.
 5. **Execution** *(formerly Trigger)*: Automated Gate 2 production readiness checklist (HTTP security headers, field-level RLS, multi-role `/browser` smoke flows, AI baseline/refusal evals), Git-driven deployment, CDN/cache optimization, and operational runbooks.
 
@@ -137,6 +137,7 @@ skills/scope/
 │   └── AGENTS.template.md            # The always-on project constitution (AGENTS.md)
 └── references/
     ├── stack-matrix.md               # The 12 infrastructure layers & tier standards
+    ├── spec-and-convergence.md       # Viability triage, ambiguity/spec quality, contracts, consistency & convergence audits
     ├── skills-and-safety.md          # Built-ins, skill & MCP inventory, packs & vetting
     ├── config-templates.md           # Permissions, hooks, MCP configs & UI rules
     ├── caching-and-scaling.md        # Cache & HTTP security headers, Redis, probes & scaling

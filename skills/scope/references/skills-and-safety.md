@@ -22,7 +22,7 @@ The S.C.O.P.E. framework governs the **lifecycle process** (phase boundaries, ch
 ---
 
 ## 2. Skill Inventory
-Every skill, slash command, and MCP server referenced by `SKILL.md`, `templates/AGENTS.template.md`, `references/stack-matrix.md`, `references/recon.md`, `references/caching-and-scaling.md`, or `references/config-templates.md` is inventoried here (Sections 2–4).
+Every skill, slash command, and MCP server referenced by `SKILL.md`, `templates/AGENTS.template.md`, `references/stack-matrix.md`, `references/spec-and-convergence.md`, `references/ai-and-agents.md`, `references/recon.md`, `references/caching-and-scaling.md`, or `references/config-templates.md` is inventoried here (Sections 2–4).
 
 - **Slash commands (`/name`):** Built-in UI/CLI shortcuts (Section 2a).
 - **Skills (`name`):** `SKILL.md` packages (Sections 2b–2d and Section 4). Activate them by calling `read_file` on `<skill-dir>/SKILL.md` (under `<skills>`, `.agents/skills/`, `.claude/skills/`, `~/.gemini/config/skills/`, or `~/.claude/skills/`), never by treating them as `/slash-commands`.
